@@ -60,7 +60,6 @@
         "LOG_CHANNEL": "stderr",
         "DEBUGBAR_ENABLED": "false",
         "DB_CONNECTION": "pgsql",
-        "DB_SSLMODE": "require",
-        "DB_EMULATE_PREPARES": "true"
+        "DB_SSLMODE": "require"
     }
 }
