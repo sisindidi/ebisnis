@@ -55,7 +55,7 @@
         "APP_SERVICES_CACHE": "/tmp/bootstrap/cache/services.php",
         "VIEW_COMPILED_PATH": "/tmp/storage/framework/views",
         "CACHE_STORE": "array",
-        "SESSION_DRIVER": "cookie",
+        "SESSION_DRIVER": "database",
         "SESSION_SECURE_COOKIE": "true",
         "LOG_CHANNEL": "stderr",
         "DEBUGBAR_ENABLED": "false",
