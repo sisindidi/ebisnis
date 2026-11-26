@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Kantin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            position: relative;
+            min-height: 100vh;
+            padding-bottom: 80px; /* Space for sticky button */
+        }
+
+        .main-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Banner Kantin */
+        .banner {
+            width: 100%;
+            height: 350px;
+            background-color: #ddd;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0 0 16px 16px;
+        }
+
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Header (Back button dll) jika diperlukan */
+        .header-back {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.8);
+            padding: 8px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Menu List Container */
+        .menu-container {
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        /* Card Menu Item */
+        .menu-card {
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            gap: 15px;
+        }
+
+        .menu-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #eee;
+        }
+
+        .menu-info {
+            flex-grow: 1;
+        }
+
+        .menu-name {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #101735;
+        }
+
+        .menu-price {
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        /* Quantity Control */
+        .qty-control {
+            display: flex;
+            align-items: center;
+            background: #f0f0f0;
+            border-radius: 20px;
+            padding: 4px 8px;
+            gap: 10px;
+        }
+
+        .qty-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .qty-value {
+            font-size: 14px;
+            font-weight: 600;
+            min-width: 15px;
+            text-align: center;
+        }
+
+        /* Sticky Bottom Button */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-submit {
+            width: 100%;
+            max-width: 400px;
+            background-color: #f15a29;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(241, 90, 41, 0.3);
+            transition: .2s;
+        }
+
+        .btn-submit:hover {
+            background-color: #e04b1d;
+        }
+    </style>
+</head>
+<body>
+<div class="main-wrapper">
+
+    <!-- Banner Outlet (Foto Kantin) -->
+    <div class="banner">
+        <a href="{{ url('/') }}" class="header-back">← Kembali</a>
+        <!-- Gambar Banner akan dinamis berdasarkan kantin -->
+        <img src="{{ asset('images/banner-kantin-dummy.jpg') }}" alt="Banner Kantin" id="banner-img">
+    </div>
+
+    <!-- List Menu -->
+    <div class="menu-container" id="menu-list">
+        
+        @if(isset($menus) && count($menus) > 0)
+            @foreach($menus as $menu)
+            <div class="menu-card" data-id="{{ $menu->id }}">
+                <!-- Foto Menu -->
+                <img src="{{ $menu->image ? asset('storage/'.$menu->image) : 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=200&q=80' }}" class="menu-img" alt="{{ $menu->name }}">
+                
+                <div class="menu-info">
+                    <div class="menu-name">{{ $menu->name }}</div>
+                    <div class="menu-price">Rp {{ number_format($menu->price, 0, ',', '.') }}</div>
+                </div>
+
+                <div class="qty-control">
+                    <!-- Tombol Minus -->
+                    <button class="qty-btn" onclick="updateQty(this, -1)">-</button>
+                    <!-- Angka Qty -->
+                    <span class="qty-value">0</span>
+                    <!-- Tombol Plus -->
+                    <button class="qty-btn" onclick="updateQty(this, 1)">+</button>
+                </div>
+            </div>
+            @endforeach
+        @else
+            <!-- Dummy Data jika $menus tidak dikirim dari Controller -->
+            @php
+                $dummyMenus = [
+                    ['id' => 1, 'name' => 'Nasi Ayam Geprek', 'price' => 15000],
+                    ['id' => 2, 'name' => 'Burger', 'price' => 18000],
+                    ['id' => 3, 'name' => 'Nasi Ayam Popcorn', 'price' => 20000],
+                    ['id' => 4, 'name' => 'Nasi Ayam Katsu', 'price' => 18000],
+                    ['id' => 5, 'name' => 'Ice Cream', 'price' => 5000],
+                    ['id' => 6, 'name' => 'Teh Pucuk', 'price' => 5000],
+                    ['id' => 7, 'name' => 'Air Mineral', 'price' => 3000],
+                ];
+            @endphp
+            @foreach($dummyMenus as $menu)
+            <div class="menu-card" data-id="{{ $menu['id'] }}">
+                <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?w=200&q=80" class="menu-img" alt="{{ $menu['name'] }}">
+                
+                <div class="menu-info">
+                    <div class="menu-name">{{ $menu['name'] }}</div>
+                    <div class="menu-price">Rp {{ number_format($menu['price'], 0, ',', '.') }}</div>
+                </div>
+
+                <div class="qty-control">
+                    <button class="qty-btn" onclick="updateQty(this, -1)">-</button>
+                    <span class="qty-value">0</span>
+                    <button class="qty-btn" onclick="updateQty(this, 1)">+</button>
+                </div>
+            </div>
+            @endforeach
+        @endif
+        
+    </div>
+
+    </div> <!-- End Main Wrapper -->
+
+    <!-- Sticky Bottom Bar -->
+    <div class="bottom-bar">
+        <button class="btn-submit" onclick="submitOrder()">Pilih Menu</button>
+    </div>
+
+    <script>
+        function updateQty(btn, change) {
+            const container = btn.parentElement;
+            const valueSpan = container.querySelector('.qty-value');
+            let currentVal = parseInt(valueSpan.innerText);
+            
+            let newVal = currentVal + change;
+            if (newVal < 0) newVal = 0; // Tidak boleh kurang dari 0
+            
+            valueSpan.innerText = newVal;
+        }
+
+        function submitOrder() {
+            // Logika ketika user menekan tombol Pilih Menu
+            // Mengumpulkan data pesanan berdasarkan angka Qty > 0
+            let orderItems = [];
+            document.querySelectorAll('.menu-card').forEach(card => {
+                const id = card.getAttribute('data-id');
+                const name = card.querySelector('.menu-name').innerText;
+                const qty = parseInt(card.querySelector('.qty-value').innerText);
+                
+                if (qty > 0) {
+                    orderItems.push({ id: id, name: name, qty: qty });
+                }
+            });
+
+            if(orderItems.length === 0) {
+                alert("Silakan pilih menu terlebih dahulu.");
+                return;
+            }
+
+            console.log("Pesanan:", orderItems);
+            alert("Berhasil memilih " + orderItems.length + " jenis menu. Lanjut ke checkout!");
+            // TODO: Redirect ke halaman checkout dengan data pesanan
+        }
+    </script>
+</body>
+</html>
