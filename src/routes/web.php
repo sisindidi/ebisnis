@@ -77,8 +77,17 @@ Route::post('/_init-db', function (\Illuminate\Http\Request $request) {
     try {
         if ($step === 'migrate') {
             \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        } elseif ($step === 'roles') {
+            \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'RoleSeeder', '--force' => true]);
+        } elseif ($step === 'menus') {
+            \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'MenuSeeder', '--force' => true]);
+        } elseif ($step === 'users') {
+            \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'UserSeeder', '--force' => true]);
         } elseif ($step === 'seed') {
             \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+        } elseif ($step === 'check-home') {
+            $html = app(\App\Http\Controllers\OutletController::class)->index()->render();
+            return response()->json(['ok' => true, 'step' => $step, 'len' => strlen($html)]);
         } else {
             return response()->json(['ok' => false, 'error' => 'Invalid step'], 400);
         }
