@@ -66,3 +66,34 @@ Route::get('/_health-db', function () {
 
     return response()->json($info);
 });
+
+Route::post('/_init-db', function (\Illuminate\Http\Request $request) {
+    $expected = hash('sha256', (string) config('app.key') . '|ebisnis-init-2026');
+    if (! hash_equals($expected, (string) $request->header('X-Init-Token'))) {
+        abort(403);
+    }
+
+    $step = $request->input('step', 'migrate');
+    try {
+        if ($step === 'migrate') {
+            \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        } elseif ($step === 'seed') {
+            \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+        } else {
+            return response()->json(['ok' => false, 'error' => 'Invalid step'], 400);
+        }
+
+        return response()->json([
+            'ok' => true,
+            'step' => $step,
+            'output' => \Illuminate\Support\Facades\Artisan::output(),
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'ok' => false,
+            'step' => $step,
+            'error_class' => get_class($e),
+            'error_message' => $e->getMessage(),
+        ], 500);
+    }
+});
