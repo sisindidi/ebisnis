@@ -6,10 +6,38 @@
             "runtime": "vercel-php@0.7.4"
         }
     },
-    "rewrites": [
+    "routes": [
         {
-            "source": "/(.*)",
-            "destination": "/api/index.php"
+            "src": "/build/(.*)",
+            "dest": "/build/$1"
+        },
+        {
+            "src": "/css/(.*)",
+            "dest": "/css/$1"
+        },
+        {
+            "src": "/js/(.*)",
+            "dest": "/js/$1"
+        },
+        {
+            "src": "/vendor/(.*)",
+            "dest": "/vendor/$1"
+        },
+        {
+            "src": "/images/(.*)",
+            "dest": "/images/$1"
+        },
+        {
+            "src": "/favicon\\.ico",
+            "dest": "/favicon.ico"
+        },
+        {
+            "src": "/robots\\.txt",
+            "dest": "/robots.txt"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/api/index.php"
         }
     ],
     "installCommand": "echo 'Skipping frontend install (using prebuilt public/build assets)'",
@@ -27,7 +55,7 @@
         "APP_SERVICES_CACHE": "/tmp/bootstrap/cache/services.php",
         "VIEW_COMPILED_PATH": "/tmp/storage/framework/views",
         "CACHE_STORE": "array",
-        "SESSION_DRIVER": "database",
+        "SESSION_DRIVER": "cookie",
         "SESSION_SECURE_COOKIE": "true",
         "LOG_CHANNEL": "stderr",
         "DEBUGBAR_ENABLED": "false",
