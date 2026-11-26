@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class OrdersChartWidget extends ChartWidget
 {
+    protected static bool $isLazy = false;
     protected static ?string $heading = 'Grafik Aktivitas Pesanan (7 Hari Terakhir)';
     protected static ?int $sort = 2;
     protected int | string | array $columnSpan = 'full';

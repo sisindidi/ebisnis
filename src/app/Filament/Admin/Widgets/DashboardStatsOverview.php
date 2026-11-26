@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardStatsOverview extends BaseWidget
 {
+    protected static bool $isLazy = false;
     protected static ?int $sort = 1;
 
     protected function getStats(): array

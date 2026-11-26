@@ -86,7 +86,9 @@ return [
             'driver' => 'pgsql',
             'url' => env('DB_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
+            'port' => (str_contains((string) env('DB_HOST', ''), '.pooler.supabase.com') && (string) env('DB_PORT', '5432') === '6543')
+                ? '5432'
+                : env('DB_PORT', '5432'),
             'database' => env('DB_DATABASE', 'postgres'),
             'username' => env('DB_USERNAME', 'postgres'),
             'password' => env('DB_PASSWORD', ''),

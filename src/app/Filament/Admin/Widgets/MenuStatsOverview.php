@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 
 class MenuStatsOverview extends BaseWidget
 {
+    protected static bool $isLazy = false;
+
     protected function getStats(): array
     {
         $user = Auth::user();
