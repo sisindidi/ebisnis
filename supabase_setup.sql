@@ -287,8 +287,8 @@ INSERT INTO public.menus (outlet_id, name, category, image, description, price, 
 SELECT v.outlet_id, v.name, v.category, v.image, v.description, v.price, v.is_available, NOW(), NOW()
 FROM (VALUES
     (1, 'Ayam Geprek', 'makanan', 'menus/ayam-geprek.jpg', 'Ayam krispi gurih digeprek dengan sambal cabai rawit pedas nikmat khas Esa Corner.', 16000, TRUE),
-    (1, 'Ayam Popcorn', 'cemilan', 'menus/ayam-popcorn.jpg', 'Potongan ayam renyah empuk dibalut tepung bumbu gurih yang renyah nagih.', 14000, TRUE),
-    (1, 'Burger', 'makanan', 'menus/burger.jpg', 'Burger lezat dengan patty daging gurih, selada segar, keju dan saus racikan spesial.', 15000, TRUE),
+    (1, 'Ayam Popcorn', 'makanan', 'menus/ayam-popcorn.jpg', 'Potongan ayam renyah empuk dibalut tepung bumbu gurih yang renyah nagih.', 14000, TRUE),
+    (1, 'Burger', 'cemilan', 'menus/burger.jpg', 'Burger lezat dengan patty daging gurih, selada segar, keju dan saus racikan spesial.', 15000, TRUE),
     (1, 'Es Kopi', 'minuman', 'menus/es-kopi.jpg', 'Kopi susu dingin segar beraroma harum penambah semangat saat jeda kuliah.', 8000, TRUE),
     (1, 'Es Krim', 'cemilan', 'menus/es-krim.jpg', 'Es krim manis lembut dingin yang memanjakan lidah di siang hari.', 7000, TRUE),
     (1, 'Kentang Goreng', 'cemilan', 'menus/kentang-goreng.jpg', 'French fries renyah keemasan bertabur gurih bumbu ditemani cocolan saus.', 10000, TRUE),

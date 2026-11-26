@@ -329,10 +329,7 @@
             <div style="background-color: #F4F6FA;" class="rounded-3xl p-6 sm:p-8 text-slate-800 shadow-xs relative overflow-hidden border border-slate-300/80">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-300/80">
                     <div>
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 border border-slate-300/90 text-slate-700 font-black text-xs uppercase tracking-wider mb-2 shadow-2xs">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                            SESI PESAN BERSAMA AKTIF • <span id="group-session-code" class="text-[#f15a29] font-mono font-bold">#KANTIN-1814</span>
-                        </div>
+                        
                         <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                             Patungan Makan Siang Istirahat Kuliah (Split Bill)
                         </h2>
@@ -401,7 +398,7 @@
                         onclick="handleMainProceed()"
                         class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#f15a29] hover:bg-orange-600 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-orange-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
                     >
-                        <span>Bayar Semua Pesanan (QRIS)</span>
+                        <span>Bayar Semua Pesanan</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                         </svg>

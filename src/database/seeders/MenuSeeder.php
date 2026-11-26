@@ -42,7 +42,7 @@ class MenuSeeder extends Seeder
             ],
             [
                 'name' => 'Ayam Popcorn',
-                'category' => 'cemilan',
+                'category' => 'makanan',
                 'image' => 'menus/ayam-popcorn.jpg',
                 'description' => 'Potongan ayam renyah empuk dibalut tepung bumbu gurih yang renyah nagih.',
                 'price' => 14000,
@@ -50,7 +50,7 @@ class MenuSeeder extends Seeder
             ],
             [
                 'name' => 'Burger',
-                'category' => 'makanan',
+                'category' => 'cemilan',
                 'image' => 'menus/burger.jpg',
                 'description' => 'Burger lezat dengan patty daging gurih, selada segar, keju dan saus racikan spesial.',
                 'price' => 15000,
