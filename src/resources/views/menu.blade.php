@@ -300,7 +300,7 @@
                         type="button" 
                         id="service-btn-dine-in" 
                         onclick="setServiceType('dine_in')"
-                        class="flex-1 sm:flex-initial px-4 py-1.5 rounded-full text-xs font-bold transition-all bg-[#0875BD] text-white shadow-xs cursor-pointer select-none"
+                        class="flex-1 sm:flex-initial px-4 py-1.5 rounded-full text-xs font-bold transition-all bg-[#f15a29] text-white shadow-xs cursor-pointer select-none"
                     >
                         Makan di Tempat (Dine In)
                     </button>
@@ -308,7 +308,7 @@
                         type="button" 
                         id="service-btn-take-away" 
                         onclick="setServiceType('take_away')"
-                        class="flex-1 sm:flex-initial px-4 py-1.5 rounded-full text-xs font-semibold bg-transparent text-[#475569] hover:text-[#0875BD] transition-all cursor-pointer select-none"
+                        class="flex-1 sm:flex-initial px-4 py-1.5 rounded-full text-xs font-semibold bg-transparent text-[#475569] hover:text-[#f15a29] transition-all cursor-pointer select-none"
                     >
                         Bungkus (Take Away)
                     </button>
@@ -1866,8 +1866,8 @@
             const takeBtn = document.getElementById('service-btn-take-away');
             const tableWrap = document.getElementById('tableNumberWrap');
 
-            const activeClass = 'flex-1 sm:flex-initial px-4 py-1.5 rounded-full text-xs font-bold transition-all bg-[#0875BD] text-white shadow-xs cursor-pointer select-none';
-            const inactiveClass = 'flex-1 sm:flex-initial px-4 py-1.5 rounded-full text-xs font-semibold bg-transparent text-[#475569] hover:text-[#0875BD] transition-all cursor-pointer select-none';
+            const activeClass = 'flex-1 sm:flex-initial px-4 py-1.5 rounded-full text-xs font-bold transition-all bg-[#f15a29] text-white shadow-xs cursor-pointer select-none';
+            const inactiveClass = 'flex-1 sm:flex-initial px-4 py-1.5 rounded-full text-xs font-semibold bg-transparent text-[#475569] hover:text-[#f15a29] transition-all cursor-pointer select-none';
 
             if (type === 'dine_in') {
                 dineBtn.className = activeClass;
