@@ -23,15 +23,5 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->render(function (\Throwable $e, \Illuminate\Http\Request $request) {
-            $expected = hash('sha256', (string) config('app.key') . '|ebisnis-diag-2026');
-            if ($request->hasHeader('X-Diag-Token') && hash_equals($expected, (string) $request->header('X-Diag-Token'))) {
-                return response()->json([
-                    'exception' => get_class($e),
-                    'message' => $e->getMessage(),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
-                ], 500);
-            }
-        });
+        //
     })->create();
