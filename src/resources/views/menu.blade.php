@@ -522,7 +522,14 @@
                                     if (file_exists(public_path('images/' . $base))) return asset('images/' . $base);
                                     return asset($clean);
                                 }
-                                return asset('storage/' . ltrim($imageVal, '/'));
+                                $trimmed = ltrim($imageVal, '/');
+                                if (file_exists(public_path('images/' . $trimmed))) {
+                                    return asset('images/' . $trimmed);
+                                }
+                                if (file_exists(public_path('images/menus/' . basename($trimmed)))) {
+                                    return asset('images/menus/' . basename($trimmed));
+                                }
+                                return asset('storage/' . $trimmed);
                             }
 
                             $lower = strtolower($name);

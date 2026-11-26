@@ -6,14 +6,19 @@ use App\Models\Menu;
 use App\Models\Outlet;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class MenuSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        Menu::truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('TRUNCATE TABLE menus RESTART IDENTITY CASCADE');
+        } else {
+            Schema::disableForeignKeyConstraints();
+            Menu::truncate();
+            Schema::enableForeignKeyConstraints();
+        }
 
         // 1. ESA CORNER
         $esa = Outlet::updateOrCreate(
@@ -269,6 +274,11 @@ class MenuSeeder extends Seeder
 
         foreach ($buyantiMenus as $item) {
             Menu::create(array_merge($item, ['outlet_id' => $buyanti->id]));
+        }
+
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("SELECT setval(pg_get_serial_sequence('outlets', 'id'), COALESCE((SELECT MAX(id) FROM outlets), 1), true)");
+            DB::statement("SELECT setval(pg_get_serial_sequence('menus', 'id'), COALESCE((SELECT MAX(id) FROM menus), 1), true)");
         }
     }
 }

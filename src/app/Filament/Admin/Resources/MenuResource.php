@@ -88,6 +88,22 @@ class MenuResource extends Resource
                 Tables\Columns\ImageColumn::make('image')
                     ->label('Foto')
                     ->size(64)
+                    ->getStateUsing(function (Menu $record): ?string {
+                        if (empty($record->image)) {
+                            return null;
+                        }
+                        if (str_starts_with($record->image, 'http')) {
+                            return $record->image;
+                        }
+                        $trimmed = ltrim($record->image, '/');
+                        if (file_exists(public_path('images/' . $trimmed))) {
+                            return asset('images/' . $trimmed);
+                        }
+                        if (file_exists(public_path('images/menus/' . basename($trimmed)))) {
+                            return asset('images/menus/' . basename($trimmed));
+                        }
+                        return asset('storage/' . $trimmed);
+                    })
                     ->extraImgAttributes(['class' => 'rounded-xl object-cover border border-[#DCEAF7] shadow-xs'])
                     ->defaultImageUrl(asset('images/kampus-esaunggul.jpg')),
 

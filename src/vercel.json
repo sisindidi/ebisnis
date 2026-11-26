@@ -1,0 +1,37 @@
+{
+    "version": 2,
+    "framework": null,
+    "functions": {
+        "api/index.php": {
+            "runtime": "vercel-php@0.7.4"
+        }
+    },
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/api/index.php"
+        }
+    ],
+    "buildCommand": "npm run build",
+    "outputDirectory": "public",
+    "env": {
+        "APP_NAME": "Esa Corner",
+        "APP_ENV": "production",
+        "APP_DEBUG": "false",
+        "APP_TIMEZONE": "Asia/Jakarta",
+        "APP_CONFIG_CACHE": "/tmp/bootstrap/cache/config.php",
+        "APP_EVENTS_CACHE": "/tmp/bootstrap/cache/events.php",
+        "APP_PACKAGES_CACHE": "/tmp/bootstrap/cache/packages.php",
+        "APP_ROUTES_CACHE": "/tmp/bootstrap/cache/routes.php",
+        "APP_SERVICES_CACHE": "/tmp/bootstrap/cache/services.php",
+        "VIEW_COMPILED_PATH": "/tmp/storage/framework/views",
+        "CACHE_STORE": "array",
+        "SESSION_DRIVER": "database",
+        "SESSION_SECURE_COOKIE": "true",
+        "LOG_CHANNEL": "stderr",
+        "DEBUGBAR_ENABLED": "false",
+        "DB_CONNECTION": "pgsql",
+        "DB_SSLMODE": "require",
+        "DB_EMULATE_PREPARES": "true"
+    }
+}
