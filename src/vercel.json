@@ -12,7 +12,8 @@
             "destination": "/api/index.php"
         }
     ],
-    "buildCommand": "npm run build",
+    "installCommand": "echo 'Skipping frontend install (using prebuilt public/build assets)'",
+    "buildCommand": "echo 'Using prebuilt public/build assets'",
     "outputDirectory": "public",
     "env": {
         "APP_NAME": "Esa Corner",
