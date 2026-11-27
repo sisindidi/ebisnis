@@ -144,6 +144,8 @@
         <img 
             src="{{ asset('images/kampus-esaunggul.jpg') }}" 
             alt="Gedung Kampus Universitas Esa Unggul" 
+            fetchpriority="high"
+            decoding="async"
             class="absolute inset-0 w-full h-full object-cover object-[70%_35%] filter brightness-100 contrast-105"
         >
 
@@ -258,7 +260,7 @@
             @php
                 $outletConfig = [
                     1 => [
-                        'image' => 'images/esacorner.png',
+                        'image' => 'images/esacorner.jpg',
                         'position' => 'center 56%',
                         'location' => 'Lantai 1 • Dekat Pintu Masuk',
                         'desc' => 'Pusat aneka bakso urat, camilan gurih, sosis, dan aneka gorengan renyah mahasiswa.',
@@ -267,7 +269,7 @@
                         'time' => '10-15 mnt',
                     ],
                     2 => [
-                        'image' => 'images/kedaimamici.png',
+                        'image' => 'images/kedaimamici.jpg',
                         'position' => 'center 15%',
                         'location' => 'Lantai 1 • Deretan No. 02',
                         'desc' => 'Spesialis masakan rumah, nasi goreng wangi, ayam cabe hijau, dan menu kenyang hemat.',
@@ -276,7 +278,7 @@
                         'time' => '12-18 mnt',
                     ],
                     3 => [
-                        'image' => 'images/kantintehnur.png',
+                        'image' => 'images/kantintehnur.jpg',
                         'position' => 'center 20%',
                         'location' => 'Lantai 1 • Deretan No. 03',
                         'desc' => 'Pusat mie ayam mantap, kuah bakso aci rempah, es teh jumbo, dan aneka minuman kopi.',
@@ -285,7 +287,7 @@
                         'time' => '8-12 mnt',
                     ],
                     4 => [
-                        'image' => 'images/kedaibuyanti.png',
+                        'image' => 'images/kedaibuyanti.jpg',
                         'position' => 'center 20%',
                         'location' => 'Lantai 1 • Deretan No. 04',
                         'desc' => 'Ayam geprek krispi sambal bawang level 1-5, ayam bakar bumbu legit, dan lalapan segar.',
@@ -401,31 +403,7 @@
             </div>
 
             @php
-                // Mengambil menu real dari database mewakili masing-masing stan kantin aktif
-                $activeOutlets = \App\Models\Outlet::where('is_active', true)->with(['menus' => function($q) {
-                    $q->where('is_available', true);
-                }])->get();
-
-                $collectedMenus = collect();
-                // Ambil hingga 2 menu terfavorit dari tiap-tiap outlet agar beragam & akurat
-                foreach ($activeOutlets as $outlet) {
-                    foreach ($outlet->menus->take(2) as $m) {
-                        $collectedMenus->push($m);
-                    }
-                }
-                // Jika kurang dari 8, lengkapi dengan menu lainnya
-                if ($collectedMenus->count() < 8) {
-                    $existingIds = $collectedMenus->pluck('id')->filter()->toArray();
-                    $fillers = \App\Models\Menu::with('outlet')
-                        ->where('is_available', true)
-                        ->whereNotIn('id', $existingIds)
-                        ->take(8 - $collectedMenus->count())
-                        ->get();
-                    foreach ($fillers as $f) {
-                        $collectedMenus->push($f);
-                    }
-                }
-                $dbMenus = $collectedMenus;
+                $dbMenus = $collectedMenus ?? collect();
 
                 // Susun item cards
                 $displayBestSellers = [];

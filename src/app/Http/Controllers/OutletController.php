@@ -3,16 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Models\Outlet;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Schema;
 
 class OutletController extends Controller
 {
     public function index()
     {
-        if (Schema::hasTable('outlets')) {
-            $outlets = Outlet::where('is_active', true)->get();
-        } else {
+        $collectedMenus = collect();
+
+        try {
+            $outlets = Outlet::where('is_active', true)
+                ->with(['menus' => function ($q) {
+                    $q->where('is_available', true);
+                }])
+                ->orderBy('id')
+                ->get();
+
+            foreach ($outlets as $outlet) {
+                foreach ($outlet->menus->take(2) as $menu) {
+                    $menu->setRelation('outlet', $outlet);
+                    $collectedMenus->push($menu);
+                }
+            }
+
+            if ($collectedMenus->count() < 8) {
+                $existingIds = $collectedMenus->pluck('id')->all();
+                foreach ($outlets as $outlet) {
+                    foreach ($outlet->menus as $menu) {
+                        if ($collectedMenus->count() >= 8) {
+                            break 2;
+                        }
+                        if (! in_array($menu->id, $existingIds, true)) {
+                            $menu->setRelation('outlet', $outlet);
+                            $collectedMenus->push($menu);
+                            $existingIds[] = $menu->id;
+                        }
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
             $outlets = collect();
         }
 
@@ -25,7 +53,6 @@ class OutletController extends Controller
             ]);
         }
 
-        // Ganti 'kantin.index' jadi 'outlet.index'
-        return view('index', compact('outlets'));
+        return view('index', compact('outlets', 'collectedMenus'));
     }
 }

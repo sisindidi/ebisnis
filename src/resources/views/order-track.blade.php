@@ -1077,13 +1077,21 @@
 
 </div><script>
     let activeOrderCode = "{{ $orderCode ?? '' }}";
+    const initialOrderData = @json($initialOrderData ?? null);
     let pollInterval = null;
     let lastKnownStatus = '';
 
     document.addEventListener('DOMContentLoaded', () => {
         loadRecentOrdersUI();
 
-        if (activeOrderCode) {
+        if (initialOrderData) {
+            renderOrderData(initialOrderData);
+            showView('result');
+            saveToRecentOrders(initialOrderData);
+            if (initialOrderData.status !== 'completed') {
+                startAutoPolling(initialOrderData.order_code);
+            }
+        } else if (activeOrderCode) {
             fetchOrder(activeOrderCode);
         } else {
             const lastCode = localStorage.getItem('esa_last_order_code');
@@ -1277,7 +1285,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': '{{ request()->hasSession() ? csrf_token() : '' }}'
                 },
                 body: JSON.stringify({ status: newStatus })
             });
@@ -1300,6 +1308,9 @@
                 const data = await res.json();
                 if (data.success && data.order) {
                     renderOrderData(data.order);
+                    if (data.order.status === 'completed') {
+                        stopAutoPolling();
+                    }
                 }
             } catch (e) {}
         }, 3000);

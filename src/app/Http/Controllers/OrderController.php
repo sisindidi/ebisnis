@@ -106,20 +106,8 @@ class OrderController extends Controller
             'status' => 'pending',
         ]);
 
-        // 2. Simpan Detail Item Order
-        foreach ($request->items as $item) {
-            $menuId = $item['menu_id'] ?? $item['id'] ?? null;
-            if ($menuId) {
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'menu_id' => $menuId,
-                    'customer_name' => $item['customer_name'] ?? ($request->customer_name ?? 'Pelanggan'),
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price'],
-                    'subtotal' => $item['price'] * $item['quantity'],
-                ]);
-            }
-        }
+        // 2. Simpan Detail Item Order (bulk insert 1 query)
+        $this->insertOrderItems($order->id, $request->items, $request->customer_name ?? 'Pelanggan');
 
         // 3. Request ke Midtrans Snap API
         $serverKey = config('services.midtrans.server_key', 'SB-Mid-server-j0ljzkyhpqU18nUwMSjy.LNa');
@@ -247,19 +235,7 @@ class OrderController extends Controller
             'status' => 'pending',
         ]);
 
-        foreach ($request->items as $item) {
-            $menuId = $item['menu_id'] ?? $item['id'] ?? null;
-            if ($menuId) {
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'menu_id' => $menuId,
-                    'customer_name' => $item['customer_name'] ?? ($request->customer_name ?? 'Pelanggan'),
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price'],
-                    'subtotal' => $item['price'] * $item['quantity'],
-                ]);
-            }
-        }
+        $this->insertOrderItems($order->id, $request->items, $request->customer_name ?? 'Pelanggan');
 
         $serverKey = config('services.midtrans.server_key', 'SB-Mid-server-j0ljzkyhpqU18nUwMSjy.LNa');
         $isProduction = config('services.midtrans.is_production', false);
@@ -333,11 +309,11 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'outlet_id' => 'required|exists:outlets,id',
+            'outlet_id' => 'required|integer',
             'order_type' => 'required|in:solo,group',
             'service_type' => 'required|in:dine_in,take_away',
             'items' => 'required|array|min:1',
-            'items.*.menu_id' => 'required|exists:menus,id',
+            'items.*.menu_id' => 'required|integer',
             'items.*.customer_name' => 'required|string',
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.price' => 'required|integer',
@@ -364,17 +340,8 @@ class OrderController extends Controller
             'status' => $status,
         ]);
 
-        // 2. Simpan Detail Item Order
-        foreach ($request->items as $item) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'menu_id' => $item['menu_id'],
-                'customer_name' => $item['customer_name'],
-                'quantity' => $item['quantity'],
-                'price' => $item['price'],
-                'subtotal' => $item['price'] * $item['quantity'],
-            ]);
-        }
+        // 2. Simpan Detail Item Order (bulk insert 1 query)
+        $this->insertOrderItems($order->id, $request->items, 'Pelanggan');
 
         return response()->json([
             'message' => 'Pesanan berhasil dibuat',
@@ -393,23 +360,7 @@ class OrderController extends Controller
             ->first();
 
         if ($order && $order->status === 'pending') {
-            try {
-                $serverKey = config('services.midtrans.server_key', 'SB-Mid-server-j0ljzkyhpqU18nUwMSjy.LNa');
-                $isProduction = config('services.midtrans.is_production', false);
-                $midtransStatusUrl = ($isProduction ? 'https://api.midtrans.com/v2/' : 'https://api.sandbox.midtrans.com/v2/') . $orderCode . '/status';
-                $midtransRes = Http::timeout(2)->withHeaders([
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Basic ' . base64_encode($serverKey . ':'),
-                ])->get($midtransStatusUrl);
-                if ($midtransRes->successful()) {
-                    $mStatus = $midtransRes->json('transaction_status');
-                    $mFraud = $midtransRes->json('fraud_status');
-                    if ($mStatus === 'settlement' || ($mStatus === 'capture' && $mFraud === 'accept')) {
-                        $order->update(['status' => 'paid']);
-                        $order->refresh();
-                    }
-                }
-            } catch (\Exception $e) {}
+            $this->syncPendingMidtransStatus($order, 2);
         }
 
         if (!$order) {
@@ -419,81 +370,9 @@ class OrderController extends Controller
             ], 404);
         }
 
-        $statusInfo = [
-            'pending' => [
-                'step' => 0,
-                'label' => 'Menunggu Pembayaran',
-                'desc' => 'Menunggu proses verifikasi pembayaran QRIS.',
-                'color' => '#f59e0b',
-                'badge_class' => 'status-pending'
-            ],
-            'paid' => [
-                'step' => 1,
-                'label' => 'Pembayaran Berhasil',
-                'desc' => 'Pembayaran lunas terverifikasi! Pesanan Anda telah diteruskan ke dapur kantin.',
-                'color' => '#10b981',
-                'badge_class' => 'status-paid'
-            ],
-            'cooking' => [
-                'step' => 2,
-                'label' => 'Menyiapkan Pesanan',
-                'desc' => 'Koki sedang memasak & meracik hidangan lezatmu dengan higienis.',
-                'color' => '#f97316',
-                'badge_class' => 'status-cooking'
-            ],
-            'ready' => [
-                'step' => 3,
-                'label' => 'Pesanan Siap Diambil',
-                'desc' => 'Hore! Makananmu sudah siap. Silakan ambil di kasir/counter kantin!',
-                'color' => '#059669',
-                'badge_class' => 'status-ready'
-            ],
-            'completed' => [
-                'step' => 4,
-                'label' => 'Pesanan Selesai',
-                'desc' => 'Pesanan telah diambil. Selamat menikmati santapan lezatmu!',
-                'color' => '#3b82f6',
-                'badge_class' => 'status-completed'
-            ],
-        ];
-
-        $currentStatus = $statusInfo[$order->status] ?? $statusInfo['paid'];
-
         return response()->json([
             'success' => true,
-            'order' => [
-                'id' => $order->id,
-                'order_code' => $order->order_code,
-                'status' => $order->status,
-                'step' => $currentStatus['step'],
-                'status_label' => $currentStatus['label'],
-                'status_desc' => $currentStatus['desc'],
-                'status_color' => $currentStatus['color'],
-                'badge_class' => $currentStatus['badge_class'],
-                'order_type' => $order->order_type,
-                'order_type_label' => $order->order_type === 'solo' ? 'Pesan Sendiri' : 'Pesan Bersama (Split Bill)',
-                'service_type' => $order->service_type,
-                'service_type_label' => $order->service_type === 'dine_in' ? 'Dine in' : 'Take Away',
-                'total_price' => $order->total_price,
-                'formatted_total' => 'Rp ' . number_format($order->total_price, 0, ',', '.'),
-                'outlet_id' => $order->outlet_id,
-                'outlet_name' => $order->outlet ? $order->outlet->name : 'Kantin Kampus',
-                'created_at' => $order->created_at ? $order->created_at->format('d M Y, H:i') : '-',
-                'created_time' => $order->created_at ? $order->created_at->format('H:i') : '-',
-                'items' => $order->items->map(function ($item) {
-                    return [
-                        'id' => $item->id,
-                        'menu_id' => $item->menu_id,
-                        'menu_name' => $item->menu ? $item->menu->name : 'Menu',
-                        'customer_name' => $item->customer_name,
-                        'quantity' => $item->quantity,
-                        'price' => $item->price,
-                        'subtotal' => $item->subtotal,
-                        'formatted_price' => 'Rp ' . number_format($item->price, 0, ',', '.'),
-                        'formatted_subtotal' => 'Rp ' . number_format($item->subtotal, 0, ',', '.'),
-                    ];
-                }),
-            ]
+            'order' => $this->formatOrderTrackingPayload($order),
         ]);
     }
 
@@ -526,29 +405,17 @@ class OrderController extends Controller
     public function showTrackingPage($orderCode = null)
     {
         $order = null;
+        $initialOrderData = null;
         if ($orderCode) {
             $order = Order::with(['outlet', 'items.menu'])->where('order_code', $orderCode)->first();
             if ($order && $order->status === 'pending') {
-                try {
-                    $serverKey = config('services.midtrans.server_key', 'SB-Mid-server-j0ljzkyhpqU18nUwMSjy.LNa');
-                    $isProduction = config('services.midtrans.is_production', false);
-                    $midtransStatusUrl = ($isProduction ? 'https://api.midtrans.com/v2/' : 'https://api.sandbox.midtrans.com/v2/') . $orderCode . '/status';
-                    $midtransRes = Http::timeout(3)->withHeaders([
-                        'Accept' => 'application/json',
-                        'Authorization' => 'Basic ' . base64_encode($serverKey . ':'),
-                    ])->get($midtransStatusUrl);
-                    if ($midtransRes->successful()) {
-                        $mStatus = $midtransRes->json('transaction_status');
-                        $mFraud = $midtransRes->json('fraud_status');
-                        if ($mStatus === 'settlement' || ($mStatus === 'capture' && $mFraud === 'accept')) {
-                            $order->update(['status' => 'paid']);
-                            $order->refresh();
-                        }
-                    }
-                } catch (\Exception $e) {}
+                $this->syncPendingMidtransStatus($order, 2);
+            }
+            if ($order) {
+                $initialOrderData = $this->formatOrderTrackingPayload($order);
             }
         }
-        return view('order-track', compact('orderCode', 'order'));
+        return view('order-track', compact('orderCode', 'order', 'initialOrderData'));
     }
 
     // Menampilkan halaman invoice resmi setelah pembayaran (baik Solo maupun Split Bill)
@@ -559,23 +426,7 @@ class OrderController extends Controller
             ->first();
 
         if ($order && $order->status === 'pending') {
-            try {
-                $serverKey = config('services.midtrans.server_key', 'SB-Mid-server-j0ljzkyhpqU18nUwMSjy.LNa');
-                $isProduction = config('services.midtrans.is_production', false);
-                $midtransStatusUrl = ($isProduction ? 'https://api.midtrans.com/v2/' : 'https://api.sandbox.midtrans.com/v2/') . $orderCode . '/status';
-                $midtransRes = Http::timeout(2)->withHeaders([
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Basic ' . base64_encode($serverKey . ':'),
-                ])->get($midtransStatusUrl);
-                if ($midtransRes->successful()) {
-                    $mStatus = $midtransRes->json('transaction_status');
-                    $mFraud = $midtransRes->json('fraud_status');
-                    if ($mStatus === 'settlement' || ($mStatus === 'capture' && $mFraud === 'accept')) {
-                        $order->update(['status' => 'paid']);
-                        $order->refresh();
-                    }
-                }
-            } catch (\Exception $e) {}
+            $this->syncPendingMidtransStatus($order, 2);
         }
 
         if (!$order) {
@@ -596,5 +447,128 @@ class OrderController extends Controller
         });
 
         return view('invoice', compact('order', 'itemsByCustomer', 'customerSummary'));
+    }
+
+    private function insertOrderItems(int $orderId, array $items, string $defaultCustomerName): void
+    {
+        $now = now();
+        $rows = [];
+        foreach ($items as $item) {
+            $menuId = $item['menu_id'] ?? $item['id'] ?? null;
+            if ($menuId) {
+                $qty = (int) $item['quantity'];
+                $price = (int) $item['price'];
+                $rows[] = [
+                    'order_id' => $orderId,
+                    'menu_id' => (int) $menuId,
+                    'customer_name' => $item['customer_name'] ?? $defaultCustomerName,
+                    'quantity' => $qty,
+                    'price' => $price,
+                    'subtotal' => $price * $qty,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+        }
+        if (! empty($rows)) {
+            OrderItem::insert($rows);
+        }
+    }
+
+    private function syncPendingMidtransStatus(Order $order, int $timeoutSeconds = 2): void
+    {
+        try {
+            $serverKey = config('services.midtrans.server_key', 'SB-Mid-server-j0ljzkyhpqU18nUwMSjy.LNa');
+            $isProduction = config('services.midtrans.is_production', false);
+            $midtransStatusUrl = ($isProduction ? 'https://api.midtrans.com/v2/' : 'https://api.sandbox.midtrans.com/v2/') . $order->order_code . '/status';
+            $midtransRes = Http::timeout($timeoutSeconds)->withHeaders([
+                'Accept' => 'application/json',
+                'Authorization' => 'Basic ' . base64_encode($serverKey . ':'),
+            ])->get($midtransStatusUrl);
+            if ($midtransRes->successful()) {
+                $mStatus = $midtransRes->json('transaction_status');
+                $mFraud = $midtransRes->json('fraud_status');
+                if ($mStatus === 'settlement' || ($mStatus === 'capture' && $mFraud === 'accept')) {
+                    $order->update(['status' => 'paid']);
+                }
+            }
+        } catch (\Throwable $e) {}
+    }
+
+    private function formatOrderTrackingPayload(Order $order): array
+    {
+        $statusInfo = [
+            'pending' => [
+                'step' => 0,
+                'label' => 'Menunggu Pembayaran',
+                'desc' => 'Menunggu proses verifikasi pembayaran QRIS.',
+                'color' => '#f59e0b',
+                'badge_class' => 'status-pending',
+            ],
+            'paid' => [
+                'step' => 1,
+                'label' => 'Pembayaran Berhasil',
+                'desc' => 'Pembayaran lunas terverifikasi! Pesanan Anda telah diteruskan ke dapur kantin.',
+                'color' => '#10b981',
+                'badge_class' => 'status-paid',
+            ],
+            'cooking' => [
+                'step' => 2,
+                'label' => 'Menyiapkan Pesanan',
+                'desc' => 'Koki sedang memasak & meracik hidangan lezatmu dengan higienis.',
+                'color' => '#f97316',
+                'badge_class' => 'status-cooking',
+            ],
+            'ready' => [
+                'step' => 3,
+                'label' => 'Pesanan Siap Diambil',
+                'desc' => 'Hore! Makananmu sudah siap. Silakan ambil di kasir/counter kantin!',
+                'color' => '#059669',
+                'badge_class' => 'status-ready',
+            ],
+            'completed' => [
+                'step' => 4,
+                'label' => 'Pesanan Selesai',
+                'desc' => 'Pesanan telah diambil. Selamat menikmati santapan lezatmu!',
+                'color' => '#3b82f6',
+                'badge_class' => 'status-completed',
+            ],
+        ];
+
+        $currentStatus = $statusInfo[$order->status] ?? $statusInfo['paid'];
+
+        return [
+            'id' => $order->id,
+            'order_code' => $order->order_code,
+            'status' => $order->status,
+            'step' => $currentStatus['step'],
+            'status_label' => $currentStatus['label'],
+            'status_desc' => $currentStatus['desc'],
+            'status_color' => $currentStatus['color'],
+            'badge_class' => $currentStatus['badge_class'],
+            'order_type' => $order->order_type,
+            'order_type_label' => $order->order_type === 'solo' ? 'Pesan Sendiri' : 'Pesan Bersama (Split Bill)',
+            'service_type' => $order->service_type,
+            'service_type_label' => $order->service_type === 'dine_in' ? 'Dine in' : 'Take Away',
+            'total_price' => $order->total_price,
+            'formatted_total' => 'Rp ' . number_format($order->total_price, 0, ',', '.'),
+            'outlet_id' => $order->outlet_id,
+            'outlet_name' => $order->outlet ? $order->outlet->name : 'Kantin Kampus',
+            'created_at' => $order->created_at ? $order->created_at->format('d M Y, H:i') : '-',
+            'created_time' => $order->created_at ? $order->created_at->format('H:i') : '-',
+            'items' => $order->items->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'menu_id' => $item->menu_id,
+                    'menu_name' => $item->menu ? $item->menu->name : 'Menu',
+                    'customer_name' => $item->customer_name,
+                    'quantity' => $item->quantity,
+                    'price' => $item->price,
+                    'subtotal' => $item->subtotal,
+                    'formatted_price' => 'Rp ' . number_format($item->price, 0, ',', '.'),
+                    'formatted_subtotal' => 'Rp ' . number_format($item->subtotal, 0, ',', '.'),
+                ];
+            })->values()->all(),
+        ];
     }
 }

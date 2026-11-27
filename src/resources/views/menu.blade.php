@@ -150,7 +150,7 @@
             
             $outletMeta = [
                 1 => [
-                    'image' => 'images/esacorner.png',
+                    'image' => 'images/esacorner.jpg',
                     'position' => 'center 56%',
                     'location' => 'Lantai 1 • Dekat Pintu Masuk',
                     'desc' => 'Pusat aneka bakso urat sapi asli, sosis, ayam popcorn, dan camilan renyah mahasiswa.',
@@ -160,7 +160,7 @@
                     'stanCode' => 'Stan 01',
                 ],
                 2 => [
-                    'image' => 'images/kedaimamici.png',
+                    'image' => 'images/kedaimamici.jpg',
                     'position' => 'center 15%',
                     'location' => 'Lantai 1 • Deretan No. 02',
                     'desc' => 'Spesialis masakan rumah, nasi goreng wangi rempah, ayam cabe hijau, dan menu kenyang hemat.',
@@ -170,7 +170,7 @@
                     'stanCode' => 'Stan 02',
                 ],
                 3 => [
-                    'image' => 'images/kantintehnur.png',
+                    'image' => 'images/kantintehnur.jpg',
                     'position' => 'center 20%',
                     'location' => 'Lantai 1 • Deretan No. 03',
                     'desc' => 'Pusat mie ayam gurih, kuah bakso aci rempah, es teh manis jumbo, dan aneka kopi.',
@@ -180,7 +180,7 @@
                     'stanCode' => 'Stan 03',
                 ],
                 4 => [
-                    'image' => 'images/kedaibuyanti.png',
+                    'image' => 'images/kedaibuyanti.jpg',
                     'position' => 'center 20%',
                     'location' => 'Lantai 1 • Deretan No. 04',
                     'desc' => 'Ayam geprek krispi sambal bawang level 1-5, ayam bakar bumbu legit, dan aneka lalapan segar.',
@@ -2196,7 +2196,7 @@
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        'X-CSRF-TOKEN': '{{ request()->hasSession() ? csrf_token() : '' }}'
                     },
                     body: JSON.stringify(payload)
                 });
