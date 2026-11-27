@@ -1066,9 +1066,6 @@
                 <a id="btnOrderMore" href="/menu/1" class="btn-main-orange" style="justify-content: center; width: 100%;">
                     <span>+ Pesan Menu Lain</span>
                 </a>
-                <a href="/" class="btn-side-white">
-                    ← Kembali ke Beranda
-                </a>
             </div>
 
         </div>

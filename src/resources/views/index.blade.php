@@ -126,7 +126,7 @@
                     <svg class="w-4 h-4 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                     </svg>
-                    <span>Cek Pesanan</span>
+                    <span>Status Pesanan</span>
                     <span id="nav-order-indicator" class="hidden absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full ring-2 ring-white animate-pulse"></span>
                 </button>
             </div>
@@ -867,17 +867,14 @@
 
             <!-- Active Order Card (If Available in LocalStorage) -->
             <div id="quickActiveOrderCard" class="hidden bg-orange-50/70 border border-orange-200 rounded-2xl p-4 mb-5 text-left">
-                <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center justify-between mb-1.5">
                     <span class="text-[11px] font-black text-orange-950 uppercase tracking-wider">Pesanan Aktif Terakhir</span>
                     <span id="quickStatusBadge" class="bg-emerald-500 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full">Aktif</span>
                 </div>
-                <div class="flex items-baseline justify-between mb-3">
+                <div class="flex items-baseline justify-between">
                     <span id="quickOrderCode" class="text-xl font-black text-[#f15a29]">ORD-XXXXXX</span>
                     <span id="quickOutletName" class="text-xs font-semibold text-slate-600">Kantin Kampus</span>
                 </div>
-                <a id="quickTrackBtn" href="/order/track" class="block w-full py-2.5 text-center bg-[#f15a29] hover:bg-orange-600 text-white rounded-xl font-bold text-xs shadow-xs transition-colors">
-                    Buka Pelacakan Lengkap &rarr;
-                </a>
             </div>
 
             <!-- Input Kode Manual -->
@@ -908,9 +905,9 @@
                 <div id="homeRecentChips" class="flex gap-2 flex-wrap"></div>
             </div>
 
-            <div class="pt-4 border-t border-slate-100 text-center">
-                <a href="/order/track" class="text-xs font-bold text-slate-500 hover:text-[#f15a29] transition-colors">
-                    Buka Halaman Pelacakan Utama &rarr;
+            <div class="pt-4 border-t border-slate-100">
+                <a id="quickTrackBtn" href="/order/track" class="block w-full py-3 text-center bg-[#f15a29] hover:bg-orange-600 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md shadow-orange-500/20 transition-colors">
+                    Buka Pelacakan Lengkap &rarr;
                 </a>
             </div>
 
@@ -1088,16 +1085,18 @@
                 const recent = JSON.parse(localStorage.getItem('esa_recent_orders') || '[]');
                 
                 const card = document.getElementById('quickActiveOrderCard');
+                const trackBtn = document.getElementById('quickTrackBtn');
                 if (lastCode) {
                     card.classList.remove('hidden');
                     document.getElementById('quickOrderCode').innerText = lastCode;
-                    document.getElementById('quickTrackBtn').href = `/order/track/${lastCode}`;
+                    if (trackBtn) trackBtn.href = `/order/track/${lastCode}`;
                     
                     if (recent.length > 0 && recent[0].code === lastCode) {
                         document.getElementById('quickOutletName').innerText = recent[0].outlet || 'Kantin Kampus';
                     }
                 } else {
                     card.classList.add('hidden');
+                    if (trackBtn) trackBtn.href = '/order/track';
                 }
 
                 const recentSec = document.getElementById('homeRecentSection');
