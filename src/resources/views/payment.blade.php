@@ -202,21 +202,6 @@
                         </strong>
                     </div>
 
-                    <!-- Tombol Konfirmasi Selesai Bayar Manual -->
-                    <div class="pt-2">
-                        <button 
-                            type="button" 
-                            id="confirmPaymentButton"
-                            onclick="confirmPaymentSuccess()"
-                            class="w-full py-4 rounded-2xl bg-gradient-to-r from-orange-500 via-[#f15a29] to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-extrabold text-sm sm:text-base shadow-xl shadow-orange-500/30 transition-all flex items-center justify-center gap-2 cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0"
-                        >
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
-                            </svg>
-                            <span id="confirmPaymentButtonText">Sudah Melakukan Pembayaran</span>
-                        </button>
-                    </div>
-
                 </div>
 
             </div>
