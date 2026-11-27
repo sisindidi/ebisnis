@@ -16,61 +16,97 @@ class OrderController extends Controller
     // Mengambil daftar menu berdasarkan outlet_id
     public function getMenusByOutlet($outletId)
     {
-        $menus = Menu::where('outlet_id', $outletId)
-                    ->orderBy('is_available', 'desc')
-                    ->get();
+        try {
+            $menus = Menu::where('outlet_id', $outletId)
+                ->orderBy('is_available', 'desc')
+                ->get();
 
-        return response()
-            ->json($menus)
-            ->header('Cache-Control', 'public, max-age=0, s-maxage=15, stale-while-revalidate=120');
+            return response()
+                ->json($menus)
+                ->header('Cache-Control', 'public, max-age=0, s-maxage=15, stale-while-revalidate=120');
+        } catch (\Throwable $e) {
+            Log::error('getMenusByOutlet DB error: ' . $e->getMessage());
+
+            return response()->json([
+                'menus' => [],
+                'db_status' => 'error',
+                'sqlstate' => (string) $e->getCode(),
+            ], 503);
+        }
     }
 
     // Menampilkan halaman menu
     public function showMenuPage($outletId)
     {
-        $outlet = Outlet::find($outletId);
-        if (!$outlet) {
-            $fallbackNames = [
-                1 => 'Esa Corner',
-                2 => 'Kantin Mamici',
-                3 => 'Kantin Teh Nur',
-                4 => 'Kedai Bu Yanti',
-            ];
-            $outlet = (object)[
-                'id' => (int)$outletId,
+        $fallbackNames = [
+            1 => 'Esa Corner',
+            2 => 'Kantin Mamici',
+            3 => 'Kantin Teh Nur',
+            4 => 'Kedai Bu Yanti',
+        ];
+
+        $outlet = null;
+        $menus = collect();
+        $dbHealthy = true;
+
+        try {
+            $outlet = Outlet::find($outletId);
+            $menus = Menu::where('outlet_id', $outletId)
+                ->orderBy('is_available', 'desc')
+                ->get();
+        } catch (\Throwable $e) {
+            $dbHealthy = false;
+            Log::error('showMenuPage DB error: ' . $e->getMessage());
+        }
+
+        if (! $outlet) {
+            $outlet = (object) [
+                'id' => (int) $outletId,
                 'name' => $fallbackNames[$outletId] ?? 'Outlet Kantin',
             ];
         }
 
-        $menus = Menu::where('outlet_id', $outletId)
-                    ->orderBy('is_available', 'desc')
-                    ->get();
+        $response = response()->view('menu', compact('menus', 'outlet'));
+        if ($dbHealthy) {
+            $response->header('Cache-Control', 'public, max-age=0, s-maxage=15, stale-while-revalidate=120');
+        }
 
-        return response()
-            ->view('menu', compact('menus', 'outlet'))
-            ->header('Cache-Control', 'public, max-age=0, s-maxage=15, stale-while-revalidate=120');
+        return $response;
     }
 
     // Menampilkan halaman baru pembayaran QRIS (bukan popup)
     public function showPaymentPage($outletId)
     {
-        $outlet = Outlet::find($outletId);
-        if (!$outlet) {
-            $fallbackNames = [
-                1 => 'Esa Corner',
-                2 => 'Kantin Mamici',
-                3 => 'Kantin Teh Nur',
-                4 => 'Kedai Bu Yanti',
-            ];
-            $outlet = (object)[
-                'id' => (int)$outletId,
+        $fallbackNames = [
+            1 => 'Esa Corner',
+            2 => 'Kantin Mamici',
+            3 => 'Kantin Teh Nur',
+            4 => 'Kedai Bu Yanti',
+        ];
+
+        $outlet = null;
+        $dbHealthy = true;
+
+        try {
+            $outlet = Outlet::find($outletId);
+        } catch (\Throwable $e) {
+            $dbHealthy = false;
+            Log::error('showPaymentPage DB error: ' . $e->getMessage());
+        }
+
+        if (! $outlet) {
+            $outlet = (object) [
+                'id' => (int) $outletId,
                 'name' => $fallbackNames[$outletId] ?? 'Outlet Kantin',
             ];
         }
 
-        return response()
-            ->view('payment', compact('outlet'))
-            ->header('Cache-Control', 'public, max-age=0, s-maxage=60, stale-while-revalidate=300');
+        $response = response()->view('payment', compact('outlet'));
+        if ($dbHealthy) {
+            $response->header('Cache-Control', 'public, max-age=0, s-maxage=60, stale-while-revalidate=300');
+        }
+
+        return $response;
     }
 
     // Membuat Snap Token Midtrans & menyimpan pesanan (status: pending)

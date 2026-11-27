@@ -99,7 +99,7 @@ return [
             'sslmode' => env('DB_SSLMODE', 'prefer'),
             'options' => extension_loaded('pdo_pgsql') ? [
                 PDO::ATTR_TIMEOUT => 5,
-                PDO::ATTR_PERSISTENT => (bool) (isset($_ENV['VERCEL']) || isset($_SERVER['VERCEL']) || getenv('VERCEL')),
+                PDO::ATTR_EMULATE_PREPARES => true,
             ] : [],
         ],
 
