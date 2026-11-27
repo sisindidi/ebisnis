@@ -427,39 +427,6 @@
                 }
                 $dbMenus = $collectedMenus;
 
-                $resolveImg = function($imageVal, $name) {
-                    if (!empty($imageVal)) {
-                        if (str_starts_with($imageVal, 'http')) {
-                            return $imageVal;
-                        }
-                        if (str_starts_with($imageVal, 'images/') || str_starts_with($imageVal, 'image/')) {
-                            $clean = preg_replace('#^image/#', 'images/', $imageVal);
-                            $base = basename($clean);
-                            if (file_exists(public_path('images/menus/' . $base))) return asset('images/menus/' . $base);
-                            if (file_exists(public_path('images/' . $base))) return asset('images/' . $base);
-                            return asset($clean);
-                        }
-                        $trimmed = ltrim($imageVal, '/');
-                        if (file_exists(public_path('images/' . $trimmed))) {
-                            return asset('images/' . $trimmed);
-                        }
-                        if (file_exists(public_path('images/menus/' . basename($trimmed)))) {
-                            return asset('images/menus/' . basename($trimmed));
-                        }
-                        return asset('storage/' . $trimmed);
-                    }
-                    $lower = strtolower($name);
-                    if (str_contains($lower, 'bakso')) return 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80';
-                    if (str_contains($lower, 'nasi goreng')) return 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=600&q=80';
-                    if (str_contains($lower, 'geprek')) return 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80';
-                    if (str_contains($lower, 'cabe')) return 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=600&q=80';
-                    if (str_contains($lower, 'mie')) return 'https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=600&q=80';
-                    if (str_contains($lower, 'otak') || str_contains($lower, 'cimol')) return 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80';
-                    if (str_contains($lower, 'jeruk')) return 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80';
-                    if (str_contains($lower, 'teh')) return 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80';
-                    return 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80';
-                };
-
                 // Susun item cards
                 $displayBestSellers = [];
                 if ($dbMenus->count() > 0) {
@@ -472,7 +439,7 @@
                             'price' => $m->price,
                             'rating' => '4.8',
                             'reviews' => rand(65, 230),
-                            'image' => $resolveImg($m->image, $m->name),
+                            'image' => \App\Models\Menu::resolveImageUrl($m->image, $m->name),
                             'desc' => $m->description ?? 'Pilihan menu terfavorit dengan rasa otentik.',
                             'is_available' => (bool) ($m->is_available ?? true),
                         ];
