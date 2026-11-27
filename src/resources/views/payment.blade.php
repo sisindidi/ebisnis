@@ -499,29 +499,50 @@
             }
         }
 
-        // Polling status secara realtime (saat user klik [Pay] di HP, layar laptop otomatis lunas)
+        // Polling status secara realtime (begitu user klik [Pay] di Midtrans, otomatis pindah ke halaman pelacakan)
+        let hasRedirected = false;
+        function checkOrderPaidNow(orderCode) {
+            if (!orderCode || hasRedirected) return;
+
+            fetch(`/order/${orderCode}/status?t=${Date.now()}`, {
+                cache: 'no-store',
+                headers: { 'Accept': 'application/json' }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    const currentStatus = data?.order?.status || data?.status;
+                    if (currentStatus === 'paid' || currentStatus === 'cooking' || currentStatus === 'ready' || currentStatus === 'completed') {
+                        hasRedirected = true;
+                        if (statusPollInterval) clearInterval(statusPollInterval);
+
+                        const btnText = document.getElementById('confirmPaymentButtonText');
+                        if (btnText) btnText.innerText = 'Pembayaran Berhasil! Mengalihkan...';
+
+                        try {
+                            localStorage.setItem('esa_last_order_code', orderCode);
+                            localStorage.removeItem('checkout_cart_items');
+                            localStorage.removeItem('cart_state_' + outletId);
+                        } catch (e) {}
+
+                        window.location.href = `/order/track/${orderCode}`;
+                    }
+                })
+                .catch(() => {});
+        }
+
         function startStatusPolling(orderCode) {
             if (statusPollInterval) clearInterval(statusPollInterval);
 
             statusPollInterval = setInterval(() => {
-                fetch(`/order/${orderCode}/status`)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.status === 'paid' || data.status === 'cooking' || data.status === 'ready' || data.status === 'completed') {
-                            clearInterval(statusPollInterval);
-                            const btnText = document.getElementById('confirmPaymentButtonText');
-                            if (btnText) btnText.innerText = '✓ Pembayaran Berhasil Terverifikasi!';
-                            
-                            localStorage.removeItem('checkout_cart_items');
-                            localStorage.removeItem('cart_state_' + outletId);
+                checkOrderPaidNow(orderCode);
+            }, 1500);
 
-                            setTimeout(() => {
-                                window.location.href = `/order/track/${orderCode}`;
-                            }, 1200);
-                        }
-                    })
-                    .catch(() => {});
-            }, 2500);
+            window.addEventListener('focus', () => checkOrderPaidNow(orderCode));
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    checkOrderPaidNow(orderCode);
+                }
+            });
         }
 
         // Timer Sesi 02:00
