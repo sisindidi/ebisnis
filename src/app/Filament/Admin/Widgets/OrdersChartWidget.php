@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class OrdersChartWidget extends ChartWidget
 {
     protected static bool $isLazy = false;
+    protected static ?string $pollingInterval = null;
     protected static ?string $heading = 'Grafik Aktivitas Pesanan (7 Hari Terakhir)';
     protected static ?int $sort = 2;
     protected int | string | array $columnSpan = 'full';
@@ -17,21 +18,25 @@ class OrdersChartWidget extends ChartWidget
     protected function getData(): array
     {
         $user = Auth::user();
-        $isSuperAdmin = ($user?->role === 'super_admin' || ($user && method_exists($user, 'hasRole') && $user->hasRole('super_admin')));
+        $isSuperAdmin = ($user?->role === 'super_admin' || ($user && method_exists($user, 'isSuperAdmin') && $user->isSuperAdmin()));
 
-        $days = collect(range(6, 0))->map(function ($i) {
-            return Carbon::today()->subDays($i);
-        });
-
+        $days = collect(range(6, 0))->map(fn ($i) => Carbon::today()->subDays($i));
         $labels = $days->map(fn ($date) => $date->format('d M'))->toArray();
 
-        $data = $days->map(function ($date) use ($user, $isSuperAdmin) {
-            $query = Order::query()->whereDate('created_at', $date);
-            if (! $isSuperAdmin && isset($user->outlet_id)) {
-                $query->where('outlet_id', $user->outlet_id);
-            }
-            return $query->count();
-        })->toArray();
+        $startDate = Carbon::today()->subDays(6)->startOfDay();
+        $rows = Order::query()
+            ->where('created_at', '>=', $startDate)
+            ->when(! $isSuperAdmin && isset($user->outlet_id), fn ($q) => $q->where('outlet_id', $user->outlet_id))
+            ->selectRaw('CAST(created_at AS DATE) as order_date, COUNT(*) as total')
+            ->groupByRaw('CAST(created_at AS DATE)')
+            ->get();
+
+        $countsByDate = [];
+        foreach ($rows as $row) {
+            $countsByDate[substr((string) $row->order_date, 0, 10)] = (int) $row->total;
+        }
+
+        $data = $days->map(fn ($date) => $countsByDate[$date->format('Y-m-d')] ?? 0)->toArray();
 
         return [
             'datasets' => [

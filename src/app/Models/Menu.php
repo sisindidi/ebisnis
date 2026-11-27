@@ -17,10 +17,22 @@ class Menu extends Model
         return $this->belongsTo(Outlet::class);
     }
 
+    private static array $resolvedUrlCache = [];
+
     /**
      * Resolve menu image URL, falling back to local public/images assets when DB storage files are absent.
      */
     public static function resolveImageUrl(?string $imageVal, string $name): string
+    {
+        $cacheKey = ($imageVal ?? '') . '|' . $name;
+        if (isset(self::$resolvedUrlCache[$cacheKey])) {
+            return self::$resolvedUrlCache[$cacheKey];
+        }
+
+        return self::$resolvedUrlCache[$cacheKey] = self::computeImageUrl($imageVal, $name);
+    }
+
+    private static function computeImageUrl(?string $imageVal, string $name): string
     {
         if (! empty($imageVal)) {
             if (str_starts_with($imageVal, 'http')) {

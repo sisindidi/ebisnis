@@ -11,31 +11,41 @@ use Illuminate\Support\Facades\Auth;
 class DashboardStatsOverview extends BaseWidget
 {
     protected static bool $isLazy = false;
+    protected static ?string $pollingInterval = null;
     protected static ?int $sort = 1;
 
     protected function getStats(): array
     {
         $user = Auth::user();
-        $isSuperAdmin = ($user?->role === 'super_admin' || ($user && method_exists($user, 'hasRole') && $user->hasRole('super_admin')));
+        $isSuperAdmin = ($user?->role === 'super_admin' || ($user && method_exists($user, 'isSuperAdmin') && $user->isSuperAdmin()));
 
-        // Menu query
+        // Menu stats (1 aggregate query instead of 3)
         $menuQuery = Menu::query();
         if (! $isSuperAdmin && isset($user->outlet_id)) {
             $menuQuery->where('outlet_id', $user->outlet_id);
         }
 
-        $totalMenu = (clone $menuQuery)->count();
-        $menuTersedia = (clone $menuQuery)->where('is_available', true)->count();
-        $menuHabis = (clone $menuQuery)->where('is_available', false)->count();
+        $menuStats = $menuQuery
+            ->selectRaw('COUNT(*) as total, COALESCE(SUM(CASE WHEN is_available = true THEN 1 ELSE 0 END), 0) as tersedia, COALESCE(SUM(CASE WHEN is_available = false THEN 1 ELSE 0 END), 0) as habis')
+            ->first();
 
-        // Order query
+        $totalMenu = (int) ($menuStats->total ?? 0);
+        $menuTersedia = (int) ($menuStats->tersedia ?? 0);
+        $menuHabis = (int) ($menuStats->habis ?? 0);
+
+        // Order stats (1 aggregate query instead of 2)
         $orderQuery = Order::query();
         if (! $isSuperAdmin && isset($user->outlet_id)) {
             $orderQuery->where('outlet_id', $user->outlet_id);
         }
 
-        $totalPesanan = (clone $orderQuery)->count();
-        $pesananHariIni = (clone $orderQuery)->whereDate('created_at', today())->count();
+        $todayStart = today()->startOfDay();
+        $orderStats = $orderQuery
+            ->selectRaw('COUNT(*) as total, COALESCE(SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END), 0) as today', [$todayStart])
+            ->first();
+
+        $totalPesanan = (int) ($orderStats->total ?? 0);
+        $pesananHariIni = (int) ($orderStats->today ?? 0);
 
         return [
             Stat::make('Total Menu', (string) $totalMenu)

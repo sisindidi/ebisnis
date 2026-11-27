@@ -28,10 +28,11 @@ class OrderResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        $query = parent::getEloquentQuery();
+        $query = parent::getEloquentQuery()->with(['outlet:id,name']);
 
-        if (! auth()->user()?->hasRole('super_admin') && auth()->user()->outlet_id) {
-            $query->where('outlet_id', auth()->user()->outlet_id);
+        $user = auth()->user();
+        if (! $user?->isSuperAdmin() && $user?->outlet_id) {
+            $query->where('outlet_id', $user->outlet_id);
         }
 
         return $query;

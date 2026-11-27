@@ -53,6 +53,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         ];
     }
 
+    private ?bool $cachedIsSuperAdmin = null;
+
     public function outlet(): BelongsTo
     {
         return $this->belongsTo(Outlet::class);
@@ -60,18 +62,16 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
 
     public function isSuperAdmin(): bool
     {
-        return $this->hasRole('super_admin');
+        if ($this->cachedIsSuperAdmin === null) {
+            $this->cachedIsSuperAdmin = $this->hasRole('super_admin');
+        }
+
+        return $this->cachedIsSuperAdmin;
     }
 
     public function getFilamentAvatarUrl(): ?string
     {
-        if ($this->avatar_url) {
-            return asset('storage/' . $this->avatar_url);
-        } else {
-            $hash = md5(strtolower(trim($this->email)));
-
-            return 'https://www.gravatar.com/avatar/' . $hash . '?d=mp&r=g&s=250';
-        }
+        return $this->avatar_url ? asset('storage/' . $this->avatar_url) : null;
     }
 
     public function canAccessPanel(Panel $panel): bool

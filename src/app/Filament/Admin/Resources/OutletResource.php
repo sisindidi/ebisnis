@@ -27,8 +27,9 @@ class OutletResource extends Resource
     {
         $query = parent::getEloquentQuery();
 
-        if (! auth()->user()?->hasRole('super_admin') && auth()->user()?->outlet_id) {
-            $query->where('id', auth()->user()->outlet_id);
+        $user = auth()->user();
+        if (! $user?->isSuperAdmin() && $user?->outlet_id) {
+            $query->where('id', $user->outlet_id);
         }
 
         return $query;
@@ -36,12 +37,12 @@ class OutletResource extends Resource
 
     public static function canCreate(): bool
     {
-        return auth()->user()?->hasRole('super_admin') ?? false;
+        return auth()->user()?->isSuperAdmin() ?? false;
     }
 
     public static function canDelete(Model $record): bool
     {
-        return auth()->user()?->hasRole('super_admin') ?? false;
+        return auth()->user()?->isSuperAdmin() ?? false;
     }
 
     public static function form(Form $form): Form

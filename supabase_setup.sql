@@ -179,6 +179,7 @@ CREATE TABLE IF NOT EXISTS public.menus (
     created_at TIMESTAMP(0) WITHOUT TIME ZONE,
     updated_at TIMESTAMP(0) WITHOUT TIME ZONE
 );
+CREATE INDEX IF NOT EXISTS menus_outlet_id_available_idx ON public.menus (outlet_id, is_available);
 
 -- 9. Orders Table
 CREATE TABLE IF NOT EXISTS public.orders (
@@ -192,6 +193,8 @@ CREATE TABLE IF NOT EXISTS public.orders (
     created_at TIMESTAMP(0) WITHOUT TIME ZONE,
     updated_at TIMESTAMP(0) WITHOUT TIME ZONE
 );
+CREATE INDEX IF NOT EXISTS orders_outlet_created_idx ON public.orders (outlet_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS orders_created_at_idx ON public.orders (created_at DESC);
 
 -- 10. Order Items Table
 CREATE TABLE IF NOT EXISTS public.order_items (
@@ -205,6 +208,8 @@ CREATE TABLE IF NOT EXISTS public.order_items (
     created_at TIMESTAMP(0) WITHOUT TIME ZONE,
     updated_at TIMESTAMP(0) WITHOUT TIME ZONE
 );
+CREATE INDEX IF NOT EXISTS order_items_order_id_idx ON public.order_items (order_id);
+CREATE INDEX IF NOT EXISTS order_items_menu_id_idx ON public.order_items (menu_id);
 
 -- ============================================================================
 -- SEED DATA (Roles, Permissions, Outlets, Menus, Users, Migrations)

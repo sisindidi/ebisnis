@@ -18,9 +18,9 @@ class LatestOrdersWidget extends BaseWidget
     public function table(Table $table): Table
     {
         $user = Auth::user();
-        $isSuperAdmin = ($user?->role === 'super_admin' || ($user && method_exists($user, 'hasRole') && $user->hasRole('super_admin')));
+        $isSuperAdmin = ($user?->role === 'super_admin' || ($user && method_exists($user, 'isSuperAdmin') && $user->isSuperAdmin()));
 
-        $query = Order::query()->latest();
+        $query = Order::query()->with('outlet:id,name')->latest();
 
         if (! $isSuperAdmin && isset($user->outlet_id)) {
             $query->where('outlet_id', $user->outlet_id);

@@ -28,12 +28,11 @@ class OrderItemResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        $query = parent::getEloquentQuery();
+        $query = parent::getEloquentQuery()->with(['order:id,order_code,outlet_id', 'menu:id,name']);
 
-        if (! auth()->user()?->hasRole('super_admin') && auth()->user()?->outlet_id) {
-            $query->whereHas('order', function (Builder $q) {
-                $q->where('outlet_id', auth()->user()->outlet_id);
-            });
+        $user = auth()->user();
+        if (! $user?->isSuperAdmin() && $user?->outlet_id) {
+            $query->whereIn('order_id', \App\Models\Order::where('outlet_id', $user->outlet_id)->select('id'));
         }
 
         return $query;
@@ -118,6 +117,8 @@ class OrderItemResource extends Resource
                     ->dateTime('d M H:i')
                     ->sortable(),
             ])
+            ->defaultSort('id', 'desc')
+            ->defaultPaginationPageOption(10)
             ->filters([
                 Tables\Filters\SelectFilter::make('menu_id')
                     ->relationship('menu', 'name', modifyQueryUsing: function (Builder $query) {

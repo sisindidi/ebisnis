@@ -10,20 +10,25 @@ use Illuminate\Support\Facades\Auth;
 class MenuStatsOverview extends BaseWidget
 {
     protected static bool $isLazy = false;
+    protected static ?string $pollingInterval = null;
 
     protected function getStats(): array
     {
         $user = Auth::user();
-        $isSuperAdmin = ($user?->role === 'super_admin' || ($user && method_exists($user, 'hasRole') && $user->hasRole('super_admin')));
+        $isSuperAdmin = ($user?->role === 'super_admin' || ($user && method_exists($user, 'isSuperAdmin') && $user->isSuperAdmin()));
 
         $query = Menu::query();
         if (! $isSuperAdmin && isset($user->outlet_id)) {
             $query->where('outlet_id', $user->outlet_id);
         }
 
-        $total = (clone $query)->count();
-        $tersedia = (clone $query)->where('is_available', true)->count();
-        $habis = (clone $query)->where('is_available', false)->count();
+        $stats = $query
+            ->selectRaw('COUNT(*) as total, COALESCE(SUM(CASE WHEN is_available = true THEN 1 ELSE 0 END), 0) as tersedia, COALESCE(SUM(CASE WHEN is_available = false THEN 1 ELSE 0 END), 0) as habis')
+            ->first();
+
+        $total = (int) ($stats->total ?? 0);
+        $tersedia = (int) ($stats->tersedia ?? 0);
+        $habis = (int) ($stats->habis ?? 0);
 
         return [
             Stat::make('Total Menu', (string) $total)
