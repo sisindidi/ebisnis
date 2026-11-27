@@ -53,6 +53,8 @@ class OutletController extends Controller
             ]);
         }
 
-        return view('index', compact('outlets', 'collectedMenus'));
+        return response()
+            ->view('index', compact('outlets', 'collectedMenus'))
+            ->header('Cache-Control', 'public, max-age=0, s-maxage=15, stale-while-revalidate=120');
     }
 }

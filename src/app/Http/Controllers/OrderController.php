@@ -20,7 +20,9 @@ class OrderController extends Controller
                     ->orderBy('is_available', 'desc')
                     ->get();
 
-        return response()->json($menus);
+        return response()
+            ->json($menus)
+            ->header('Cache-Control', 'public, max-age=0, s-maxage=15, stale-while-revalidate=120');
     }
 
     // Menampilkan halaman menu
@@ -44,7 +46,9 @@ class OrderController extends Controller
                     ->orderBy('is_available', 'desc')
                     ->get();
 
-        return view('menu', compact('menus', 'outlet'));
+        return response()
+            ->view('menu', compact('menus', 'outlet'))
+            ->header('Cache-Control', 'public, max-age=0, s-maxage=15, stale-while-revalidate=120');
     }
 
     // Menampilkan halaman baru pembayaran QRIS (bukan popup)
@@ -64,7 +68,9 @@ class OrderController extends Controller
             ];
         }
 
-        return view('payment', compact('outlet'));
+        return response()
+            ->view('payment', compact('outlet'))
+            ->header('Cache-Control', 'public, max-age=0, s-maxage=60, stale-while-revalidate=300');
     }
 
     // Membuat Snap Token Midtrans & menyimpan pesanan (status: pending)
