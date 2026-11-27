@@ -102,14 +102,15 @@
         }
 
         .brand {
-            font-size: 23px;
-            line-height: 1.2;
-            font-weight: 800;
-            letter-spacing: .4px;
-        }
-
-        .brand span {
-            color: var(--orange);
+            font-size: 24px;
+            line-height: 1.1;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            color: #0066B3;
+            text-shadow: 0 2px 8px rgba(0, 102, 179, 0.2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .campus {
@@ -370,12 +371,18 @@
 <div class="page">
     <div class="actions-top no-print">
         <a href="{{ route('menu.page', $order->outlet_id) }}" class="back-link">← Kembali ke menu</a>
-        <button type="button" class="button" onclick="window.print()">Cetak struk</button>
     </div>
 
     <main class="receipt">
         <header class="receipt-header">
-            <div class="brand">ESA <span>CORNER</span></div>
+            <div class="brand">
+                <span>Esa</span>
+                <span style="margin-left: 5px; display: inline-flex; align-items: center;">
+                    <span>C</span>
+                    <img src="{{ asset('images/esa-logo.png') }}" alt="o" style="width: 22px; height: 22px; object-fit: contain; display: inline-block; margin: 0 2px -2px 2px;">
+                    <span>rner</span>
+                </span>
+            </div>
             <div class="campus">Universitas Esa Unggul</div>
             <div class="outlet-name">{{ $order->outlet->name ?? 'Outlet Kampus' }}</div>
             <div class="receipt-title">Struk Pembayaran</div>
@@ -467,8 +474,7 @@
         
 
     <div class="bottom-actions no-print">
-        <button type="button" class="button button-primary" onclick="window.print()">Cetak struk pembayaran</button>
-        <a href="{{ route('order.track', $order->order_code) }}" class="button">Lacak status pesanan</a>
+        <a href="{{ route('order.track', $order->order_code) }}" class="button button-primary">Lacak status pesanan</a>
         <a href="{{ route('menu.page', $order->outlet_id) }}" class="button">Pesan menu lainnya</a>
     </div>
 </div>

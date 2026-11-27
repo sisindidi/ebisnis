@@ -51,12 +51,8 @@
         .logo {
             font-size: 24px;
             font-weight: 800;
-            color: var(--dark);
+            color: #0066B3;
             text-decoration: none;
-        }
-
-        .logo span {
-            color: var(--primary);
         }
 
         .nav-center-menu {
@@ -852,12 +848,17 @@
 
 <!-- DESKTOP NAVBAR -->
 <nav class="navbar">
-    <a href="{{ url('/') }}" class="logo" style="text-decoration: none; display: flex; align-items: center; gap: 6px; font-weight: 900; font-size: 22px; color: #0066B3; text-shadow: 0 2px 8px rgba(0, 102, 179, 0.2);">
-        <span>Esa</span>
-        <span style="display: inline-flex; align-items: center;">
-            <span>C</span>
-            <img src="{{ asset('images/esa-logo.png') }}" alt="o" style="width: 20px; height: 20px; object-fit: contain; margin: 0 2px -2px 2px;">
-            <span>rner</span>
+    <a href="{{ url('/') }}" class="logo" style="text-decoration: none; display: flex; flex-direction: column; line-height: 1; color: #0066B3;">
+        <div style="display: flex; align-items: center; font-weight: 900; font-size: 25px; letter-spacing: -0.02em; color: #0066B3; text-shadow: 0 2px 8px rgba(0, 102, 179, 0.2);">
+            <span>Esa</span>
+            <span style="margin-left: 6px; display: inline-flex; align-items: center;">
+                <span>C</span>
+                <img src="{{ asset('images/esa-logo.png') }}" alt="o" style="width: 26px; height: 26px; object-fit: contain; display: inline-block; margin: 0 2px -2px 2px;">
+                <span>rner</span>
+            </span>
+        </div>
+        <span style="font-size: 10.5px; font-weight: 700; color: #64748b; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 4px;">
+            Kantin Kampus Terpadu
         </span>
     </a>
     

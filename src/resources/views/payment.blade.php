@@ -190,23 +190,6 @@
                                 <span>Atau klik di sini untuk buka pembayaran di tab baru &rarr;</span>
                             </a>
                         </div>
-
-                        <!-- Badge Dukungan Aplikasi Pembayaran -->
-                        <div class="flex items-center justify-center gap-2 flex-wrap mt-3 text-[11px] font-bold text-slate-500 bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
-                            <span>📲 BCA</span>
-                            <span>•</span>
-                            <span>Mandiri</span>
-                            <span>•</span>
-                            <span>BRI</span>
-                            <span>•</span>
-                            <span>BNI</span>
-                            <span>•</span>
-                            <span class="text-[#f15a29]">GoPay</span>
-                            <span>•</span>
-                            <span>OVO</span>
-                            <span>•</span>
-                            <span>ShopeePay</span>
-                        </div>
                     </div>
 
                     <!-- Kotak Nominal Tagihan -->
@@ -217,9 +200,6 @@
                         <strong class="text-2xl sm:text-3xl font-black text-[#f15a29] block" id="exactAmountDisplay">
                             Rp 0
                         </strong>
-                        <span class="text-[11px] text-slate-400 block font-medium">
-                            Setelah klik [Pay] di HP, halaman ini akan otomatis terverifikasi lunas
-                        </span>
                     </div>
 
                     <!-- Tombol Konfirmasi Selesai Bayar Manual -->
@@ -233,7 +213,7 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
                             </svg>
-                            <span id="confirmPaymentButtonText">Saya Sudah Bayar via QRIS</span>
+                            <span id="confirmPaymentButtonText">Sudah Melakukan Pembayaran</span>
                         </button>
                     </div>
 
@@ -659,7 +639,7 @@
                 alert('Gagal menyimpan pesanan. Silakan coba lagi.');
                 isSubmitting = false;
                 if (btn) btn.disabled = false;
-                if (btnText) btnText.innerText = 'Saya Sudah Bayar via QRIS';
+                if (btnText) btnText.innerText = 'Sudah Melakukan Pembayaran';
             });
         }
     </script>
