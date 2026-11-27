@@ -94,43 +94,42 @@
                             </span>
                         </div>
                         <span class="text-[10px] sm:text-[11px] font-bold text-slate-500 tracking-wider uppercase block mt-1">
-                            Kantin Kampus
+                            Kantin Kampus Terpadu
                         </span>
                     </div>
                 </a>
             </div>
 
             <!-- Nav Links Desktop -->
-            <nav class="hidden lg:flex items-center gap-6 text-xs sm:text-sm font-semibold text-slate-600">
-                <a href="/" class="hover:text-[#f15a29] transition-colors">Beranda</a>
-                <a href="#view-menu-catalog" class="hover:text-[#f15a29] transition-colors"> Menu </a>
-                <a href="/order/track" class="hover:text-[#f15a29] transition-colors">Status Antrean</a>
+            <nav class="hidden md:flex items-center gap-1 text-xs sm:text-sm font-bold text-slate-600 bg-slate-100/80 p-1 rounded-full border border-slate-200/70">
+                <a href="/" class="px-3.5 py-1.5 rounded-full text-slate-600 hover:text-[#f15a29] transition-all">Home</a>
+                <a href="#view-menu-catalog" class="px-3.5 py-1.5 rounded-full bg-white text-[#f15a29] shadow-2xs transition-all">Menu</a>
             </nav>
 
             <!-- Action Buttons -->
             <div class="flex items-center gap-3">
 
-                <!-- Cek Status Pesanan Button -->
+                <!-- Status Antrean Button -->
                 <a 
                     href="/order/track" 
-                    class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-orange-50 hover:bg-orange-100 text-[#ea580c] font-bold text-xs border border-orange-200/80 transition-all shadow-xs"
+                    class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-50 hover:bg-orange-100 text-[#ea580c] font-bold text-xs sm:text-sm border border-orange-200/80 transition-all shadow-xs"
                 >
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                     </svg>
-                    <span>Cek Antrean</span>
+                    <span>Status Antrean</span>
                 </a>
 
                 <!-- Back to Home Button -->
                 <a 
                     href="/" 
-                    class="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors"
-                    title="Kembali ke Beranda Utama"
+                    class="inline-flex items-center gap-1 px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs sm:text-sm transition-colors"
+                    title="Kembali ke Home"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
-                    <span class="hidden md:inline">Beranda</span>
+                    <span class="hidden md:inline">Home</span>
                 </a>
             </div>
 
