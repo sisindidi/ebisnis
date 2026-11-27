@@ -115,7 +115,7 @@ class AdminPanelProvider extends PanelProvider
                     ->shouldRegisterNavigation(false)
                     ->shouldShowDeleteAccountForm(false)
                     ->shouldShowSanctumTokens(false)
-                    ->shouldShowBrowserSessionsForm()
+                    ->shouldShowBrowserSessionsForm(false)
                     ->shouldShowAvatarForm(),
             ])
             ->resources([

@@ -344,3 +344,18 @@
         background: #0875BD;
     }
 </style>
+<script>
+    (function () {
+        function upgradeNavigateHover() {
+            document.querySelectorAll('a[wire\\:navigate]').forEach(function (el) {
+                if (!el.hasAttribute('wire:navigate.hover')) {
+                    el.removeAttribute('wire:navigate');
+                    el.setAttribute('wire:navigate.hover', '');
+                }
+            });
+        }
+        document.addEventListener('livewire:init', upgradeNavigateHover);
+        document.addEventListener('alpine:init', upgradeNavigateHover);
+        document.addEventListener('DOMContentLoaded', upgradeNavigateHover);
+    })();
+</script>

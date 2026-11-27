@@ -74,7 +74,7 @@
         "APP_SERVICES_CACHE": "/tmp/bootstrap/cache/services.php",
         "VIEW_COMPILED_PATH": "/tmp/storage/framework/views",
         "CACHE_STORE": "file",
-        "SESSION_DRIVER": "database",
+        "SESSION_DRIVER": "cookie",
         "SESSION_LIFETIME": "1440",
         "SESSION_SECURE_COOKIE": "true",
         "LOG_CHANNEL": "stderr",
