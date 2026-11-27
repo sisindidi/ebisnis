@@ -109,32 +109,33 @@
             flex: 1;
         }
 
-        /* OUTLET HERO HEADER (PERSIS MENU.BLADE.PHP) */
+        /* OUTLET HERO HEADER (COMPACT, DENGAN FOTO ESGUL SEPERTI BERANDA) */
         .track-hero {
             background-color: #EAF4FF;
-            border-radius: 24px;
+            border-radius: 18px;
             overflow: hidden;
             color: #0f172a;
             display: flex;
             align-items: center;
-            min-height: 180px;
-            margin-bottom: 25px;
+            min-height: 112px;
+            margin-bottom: 18px;
             position: relative;
             border: 1px solid rgba(191, 219, 254, 0.8);
             box-shadow: 0 4px 16px rgba(37, 99, 235, 0.06);
         }
 
         .track-hero-content {
-            width: 62%;
-            padding: 32px 42px;
+            width: 65%;
+            padding: 20px 30px;
+            position: relative;
             z-index: 2;
         }
 
         .track-hero-content h1 {
-            font-size: 28px;
+            font-size: 21px;
             font-weight: 800;
             line-height: 1.25;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             color: #0f172a;
         }
 
@@ -144,22 +145,39 @@
 
         .track-hero-content p {
             color: #475569;
-            font-size: 14px;
-            line-height: 1.55;
-            max-width: 650px;
+            font-size: 12.5px;
+            line-height: 1.45;
+            max-width: 560px;
             font-weight: 500;
         }
 
         .track-hero-bg {
             position: absolute;
-            right: 0;
-            top: 0;
-            width: 50%;
+            inset: 0;
+            width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.15;
-            mask-image: linear-gradient(to right, transparent 0%, black 100%);
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 100%);
+            object-position: 70% 35%;
+            filter: brightness(1) contrast(1.05);
+            z-index: 0;
+        }
+
+        .track-hero-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: linear-gradient(90deg, #EAF4FF 0%, rgba(234, 244, 255, 0.95) 45%, rgba(234, 244, 255, 0.7) 65%, rgba(234, 244, 255, 0.2) 82%, transparent 100%);
+        }
+
+        @media (max-width: 768px) {
+            .track-hero-content {
+                width: 100%;
+                padding: 18px 20px;
+            }
+            .track-hero-overlay {
+                background: linear-gradient(180deg, rgba(234, 244, 255, 0.96) 0%, rgba(234, 244, 255, 0.85) 60%, rgba(234, 244, 255, 0.45) 100%);
+            }
         }        /* SEARCH BAR */
         .search-bar-wrap {
             background: white;
@@ -292,39 +310,39 @@
         /* STATUS BANNER CARD */
         .status-hero-card {
             background: white;
-            border-radius: 16px;
-            padding: 24px 30px;
+            border-radius: 14px;
+            padding: 16px 22px;
             border: 1.5px solid #edf2f7;
             box-shadow: 0 2px 10px rgba(0,0,0,0.04);
             display: flex;
             align-items: center;
-            gap: 22px;
+            gap: 16px;
             transition: all 0.3s ease;
         }
 
         .status-avatar {
-            width: 72px;
-            height: 72px;
-            border-radius: 20px;
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 34px;
+            font-size: 26px;
             flex-shrink: 0;
             transition: all 0.3s;
         }
 
         .status-meta h2 {
-            font-size: 20px;
+            font-size: 17px;
             font-weight: 800;
             color: var(--dark);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .status-meta p {
-            font-size: 14px;
+            font-size: 13px;
             color: #64748b;
-            line-height: 1.45;
+            line-height: 1.4;
         }
 
         /* STEPPER CARD */
@@ -859,13 +877,14 @@
 
 <div class="desktop-container">
 
-    <!-- OUTLET HERO BANNER (IDENTIK DENGAN HALAMAN MENU) -->
+    <!-- OUTLET HERO BANNER (COMPACT DENGAN FOTO ESGUL) -->
     <div class="track-hero">
+        <img src="{{ asset('images/kampus-esaunggul.jpg') }}" class="track-hero-bg" alt="Gedung Kampus Universitas Esa Unggul">
+        <div class="track-hero-overlay"></div>
         <div class="track-hero-content">
             <h1>Cek Status Pesanan Anda</h1>
             <p>Temukan informasi terbaru tentang pesananmu, mulai dari proses persiapan hingga makanan siap diambil.</p>
         </div>
-        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1000&q=80" class="track-hero-bg" alt="Banner Kantin">
     </div>
 
     <!-- SEARCH & QUICK CODE SWITCHER BAR -->
