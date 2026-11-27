@@ -253,10 +253,6 @@
                         Pilih stan kantin tujuan untuk membuka katalog menu lengkap dan langsung memesan
                     </p>
                 </div>
-                <div class="text-xs font-bold text-slate-600 flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                    <span>Semua stan buka hari ini (08.00 - 17.00 WIB)</span>
-                </div>
             </div>
 
             @php
@@ -780,9 +776,6 @@
 
             <!-- Modal Header -->
             <div class="text-center mb-6">
-                <div class="w-12 h-12 rounded-2xl bg-orange-100 text-[#f15a29] flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner">
-                    🍱
-                </div>
                 <h3 class="text-xl font-black text-slate-900" id="modalOutletTitle">Mulai Pemesanan</h3>
                 <p class="text-xs text-slate-500 font-medium mt-1" id="modalOutletSubtitle">
                     Silakan isi nama Anda dan pilih metode pemesanan

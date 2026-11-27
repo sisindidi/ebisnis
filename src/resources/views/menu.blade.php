@@ -152,7 +152,7 @@
                 1 => [
                     'image' => 'images/esacorner.png',
                     'position' => 'center 56%',
-                    'location' => 'Kantin Kampus (Lantai 1, Dekat Lobi)',
+                    'location' => 'Lantai 1 • Dekat Pintu Masuk',
                     'desc' => 'Pusat aneka bakso urat sapi asli, sosis, ayam popcorn, dan camilan renyah mahasiswa.',
                     'rating' => '4.8',
                     'reviews' => '1.2rb Ulasan',
@@ -162,7 +162,7 @@
                 2 => [
                     'image' => 'images/kedaimamici.png',
                     'position' => 'center 15%',
-                    'location' => 'Kantin Kampus (Lantai 1, Deretan Tengah)',
+                    'location' => 'Lantai 1 • Deretan No. 02',
                     'desc' => 'Spesialis masakan rumah, nasi goreng wangi rempah, ayam cabe hijau, dan menu kenyang hemat.',
                     'rating' => '4.9',
                     'reviews' => '2.1rb Ulasan',
@@ -172,7 +172,7 @@
                 3 => [
                     'image' => 'images/kantintehnur.png',
                     'position' => 'center 20%',
-                    'location' => 'Kantin Kampus (Lantai 1, Blok Timur)',
+                    'location' => 'Lantai 1 • Deretan No. 03',
                     'desc' => 'Pusat mie ayam gurih, kuah bakso aci rempah, es teh manis jumbo, dan aneka kopi.',
                     'rating' => '4.8',
                     'reviews' => '950 Ulasan',
@@ -182,7 +182,7 @@
                 4 => [
                     'image' => 'images/kedaibuyanti.png',
                     'position' => 'center 20%',
-                    'location' => 'Kantin Kampus (Lantai 1, Sayap Barat)',
+                    'location' => 'Lantai 1 • Deretan No. 04',
                     'desc' => 'Ayam geprek krispi sambal bawang level 1-5, ayam bakar bumbu legit, dan aneka lalapan segar.',
                     'rating' => '4.9',
                     'reviews' => '2.4rb Ulasan',
@@ -231,11 +231,6 @@
                         <div class="flex items-center gap-2 flex-wrap mb-2">
                             <span class="bg-white/90 text-blue-700 text-xs font-black px-2.5 py-0.5 rounded-lg border border-blue-200/60 shadow-2xs">
                                 {{ $currMeta['stanCode'] }}
-                            </span>
-                    
-                            <span class="bg-white/90 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-lg flex items-center gap-1.5 border border-emerald-200/60 shadow-2xs">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                Buka • 08.00 - 17.00 WIB
                             </span>
                         </div>
 
