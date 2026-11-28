@@ -1022,7 +1022,7 @@
 
             <!-- TICKET PASS CARD -->
             <div class="ticket-card">
-                <div class="ticket-badge-tag">TIKET PESANAN KANTIN</div>
+                <div class="ticket-badge-tag">KODE PESANAN KANTIN</div>
                 <div class="ticket-code" id="displayTicketCode">ORD-XXXXXX</div>
                 <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
                     <button type="button" class="btn-copy-code" onclick="copyOrderCode()">
