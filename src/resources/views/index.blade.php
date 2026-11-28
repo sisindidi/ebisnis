@@ -108,7 +108,7 @@
 
             <!-- Nav Links Desktop -->
             <nav id="desktop-nav-links" class="hidden md:flex items-center gap-1 text-xs sm:text-sm font-bold text-slate-600 bg-slate-100/80 p-1 rounded-full border border-slate-200/70">
-                <a href="#home-section" data-nav-target="home-section" class="nav-bubble-pill px-3.5 py-1.5 rounded-full bg-white text-[#f15a29] shadow-2xs transition-all">Home</a>
+                <a href="#home-section" data-nav-target="home-section" class="nav-bubble-pill px-3.5 py-1.5 rounded-full bg-white text-[#f15a29] shadow-2xs transition-all">Beranda</a>
                 <a href="#kategori-section" data-nav-target="kategori-section" class="nav-bubble-pill px-3 py-1.5 rounded-full text-slate-600 hover:text-[#f15a29] transition-all">Kategori</a>
                 <a href="#kantin-section" data-nav-target="kantin-section" class="nav-bubble-pill px-3 py-1.5 rounded-full text-slate-600 hover:text-[#f15a29] transition-all">Titik Kantin</a>
                 <a href="#menu-terlaris-section" data-nav-target="menu-terlaris-section" class="nav-bubble-pill px-3 py-1.5 rounded-full text-slate-600 hover:text-[#f15a29] transition-all">Menu Terlaris</a>
@@ -724,7 +724,7 @@
                 <span class="text-xs text-slate-500 font-semibold">Satu Kampus, Banyak Rasa</span>
             </div>
             <div class="flex items-center gap-6 font-semibold">
-                <a href="#home-section" class="hover:text-slate-800">Home</a>
+                <a href="#home-section" class="hover:text-slate-800">Beranda</a>
                 <a href="#kantin-section" class="hover:text-slate-800">Kantin</a>
                 <a href="/order/track" class="hover:text-slate-800">Pelacakan Pesanan</a>
             </div>

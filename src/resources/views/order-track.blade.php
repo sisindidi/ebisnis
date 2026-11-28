@@ -863,7 +863,7 @@
     </a>
     
     <div class="nav-center-menu">
-        <a href="{{ url('/') }}">Home</a>
+        <a href="{{ url('/') }}">Beranda</a>
         <a href="{{ url('/#kantin-section') }}">Kantin</a>
         <a href="{{ route('order.track') }}" class="active">Pesanan Kantin</a>
     </div>
