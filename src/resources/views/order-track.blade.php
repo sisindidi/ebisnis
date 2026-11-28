@@ -61,6 +61,14 @@
             gap: 25px;
         }
 
+        @media (min-width: 768px) {
+            .nav-center-menu {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
         .nav-center-menu a {
             text-decoration: none;
             color: var(--dark);
@@ -866,13 +874,6 @@
         <a href="{{ url('/') }}">Beranda</a>
         <a href="{{ url('/#kantin-section') }}">Kantin</a>
         <a href="{{ route('order.track') }}" class="active">Pesanan Kantin</a>
-    </div>
-
-    <div class="nav-right">
-        <a href="{{ url('/') }}" class="btn-back-home">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-            Kembali ke Beranda
-        </a>
     </div>
 </nav>
 

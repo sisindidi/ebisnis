@@ -370,7 +370,7 @@
 <body>
 <div class="page">
     <div class="actions-top no-print">
-        <a href="{{ route('menu.page', $order->outlet_id) }}" class="back-link">← Kembali ke menu</a>
+        <a href="{{ url('/') }}" class="back-link">← Kembali ke beranda</a>
     </div>
 
     <main class="receipt">
