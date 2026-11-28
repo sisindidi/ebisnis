@@ -325,10 +325,10 @@
                     <div>
                         
                         <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                            Patungan Makan Siang Istirahat Kuliah (Split Bill)
+                            Pesan Makanan Bersama Teman (Split Bill)
                         </h2>
-                        <p class="text-xs sm:text-sm text-slate-600 mt-1">
-                            Tambahkan nama teman Anda di bawah ini. Setiap nama akan memiliki tombol untuk membuka halaman pemilihan menunya masing-masing.
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                            Ajak temanmu untuk memesan makanan bersama! Tambahkan nama teman yang ikut, lalu setiap orang bisa memilih makanan dan minuman sesuai keinginan masing-masing.
                         </p>
                     </div>
                 </div>
@@ -1519,7 +1519,7 @@
                             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                                 <div class="flex items-center gap-2.5">
                                     <div class="w-10 h-10 rounded-2xl ${f.isHost ? 'bg-orange-500 text-white' : 'bg-blue-600 text-white'} flex items-center justify-center font-black text-sm shadow-xs">
-                                        ${f.isHost ? '👑' : f.name.charAt(0).toUpperCase()}
+                                        ${f.name.trim().charAt(0).toUpperCase()}
                                     </div>
                                     <div>
                                         <h4 class="text-sm font-black text-slate-900">${f.name}</h4>
@@ -2085,7 +2085,7 @@
                             <div class="flex items-center justify-between pb-2 border-b border-slate-200/70">
                                 <div class="flex items-center gap-2">
                                     <div class="w-7 h-7 rounded-xl ${avatarBg} text-white font-black text-xs flex items-center justify-center shadow-xs">
-                                        ${f.isHost ? '👑' : initial}
+                                        ${initial}
                                     </div>
                                     <div>
                                         <strong class="text-xs font-black text-slate-900 block leading-none">${f.name}</strong>
