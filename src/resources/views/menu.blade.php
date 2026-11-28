@@ -419,14 +419,6 @@
                         </h3>
                     </div>
                 </div>
-
-                <button 
-                    type="button" 
-                    onclick="returnToSplitFriendsView()"
-                    class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 via-[#f15a29] to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-extrabold text-xs shadow-md shadow-orange-500/25 transition-all flex items-center gap-2 cursor-pointer self-stretch sm:self-auto justify-center"
-                >
-                    <span>✓ Simpan & Kembali ke Daftar Teman</span>
-                </button>
             </div>
 
             <!-- Filter Kategori & Pencarian Menu -->
