@@ -61,10 +61,10 @@ class OutletController extends Controller
 
         if ($outlets->isEmpty()) {
             $outlets = collect([
-                (object) ['id' => 1, 'name' => 'Esa Corner', 'description' => 'Pusat jajanan burger, ayam krispi, camilan dan es kopi kekinian'],
-                (object) ['id' => 2, 'name' => 'Kantin Mamici', 'description' => 'Spesialis baso aci, baso urat, mie ayam gurih, dan aneka jajanan lezat'],
-                (object) ['id' => 3, 'name' => 'Kantin Teh Nur', 'description' => 'Menu ayam cabe hijau, ayam bawang putih mantap, aneka gorengan, dan jus segar'],
-                (object) ['id' => 4, 'name' => 'Kedai Bu Yanti', 'description' => 'Aneka nasi goreng, kwetiau, mie goreng & rebus lezat resep khas Bu Yanti'],
+                (object) ['id' => 1, 'name' => 'Esa Corner', 'description' => 'Menyediakan aneka burger, ayam krispi, camilan ringan, serta berbagai pilihan minuman segar.'],
+                (object) ['id' => 2, 'name' => 'Kantin Mamici', 'description' => 'Menawarkan berbagai hidangan seperti baso aci, baso urat, mi ayam gurih, dan aneka jajanan lezat.'],
+                (object) ['id' => 3, 'name' => 'Kantin Teh Nur', 'description' => 'Menyajikan aneka menu rumahan seperti ayam cabe hijau, ayam bawang putih, aneka gorengan, dan minuman.'],
+                (object) ['id' => 4, 'name' => 'Kedai Bu Yanti', 'description' => 'Menyediakan beragam hidangan favorit seperti nasi goreng, kwetiau, mi goreng, serta aneka makanan lainnya.'],
             ]);
         }
 

@@ -276,10 +276,10 @@ ON CONFLICT DO NOTHING;
 -- Outlets (IDs 1..4)
 INSERT INTO public.outlets (id, name, slug, description, is_active, created_at, updated_at)
 VALUES
-    (1, 'Esa Corner', 'esa-corner', 'Pusat jajanan burger, ayam krispi, camilan dan es kopi kekinian', TRUE, NOW(), NOW()),
-    (2, 'Kantin Mamici', 'kantin-mamici', 'Spesialis baso aci, baso urat, mie ayam gurih, dan aneka jajanan lezat', TRUE, NOW(), NOW()),
-    (3, 'Kantin Teh Nur', 'kantin-teh-nur', 'Menu ayam cabe hijau, ayam bawang putih mantap, aneka gorengan, dan jus segar', TRUE, NOW(), NOW()),
-    (4, 'Kedai Bu Yanti', 'kedai-bu-yanti', 'Aneka nasi goreng, kwetiau, mie goreng & rebus lezat resep khas Bu Yanti', TRUE, NOW(), NOW())
+    (1, 'Esa Corner', 'esa-corner', 'Menyediakan aneka burger, ayam krispi, camilan ringan, serta berbagai pilihan minuman segar.', TRUE, NOW(), NOW()),
+    (2, 'Kantin Mamici', 'kantin-mamici', 'Menawarkan berbagai hidangan seperti baso aci, baso urat, mi ayam gurih, dan aneka jajanan lezat.', TRUE, NOW(), NOW()),
+    (3, 'Kantin Teh Nur', 'kantin-teh-nur', 'Menyajikan aneka menu rumahan seperti ayam cabe hijau, ayam bawang putih, aneka gorengan, dan minuman.', TRUE, NOW(), NOW()),
+    (4, 'Kedai Bu Yanti', 'kedai-bu-yanti', 'Menyediakan beragam hidangan favorit seperti nasi goreng, kwetiau, mi goreng, serta aneka makanan lainnya.', TRUE, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
     name = EXCLUDED.name,
     slug = EXCLUDED.slug,

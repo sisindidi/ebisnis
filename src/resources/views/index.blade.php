@@ -251,8 +251,8 @@
                     <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-2.5">
                         Esa Corner Kampus Tangerang
                     </h2>
-                    <p class="text-sm text-slate-500 font-medium mt-1">
-                        Pilih stan kantin tujuan untuk membuka katalog menu lengkap dan langsung memesan
+                    <p class="text-sm text-slate-500 font-medium mt-1 max-w-3xl leading-relaxed">
+                        Pilih kantin sesuai keinginan Anda dan jelajahi berbagai pilihan makanan serta minuman yang tersedia. Pesan menu favorit Anda dengan praktis melalui Esa Corner.
                     </p>
                 </div>
             </div>
@@ -263,7 +263,7 @@
                         'image' => 'images/esacorner.jpg',
                         'position' => 'center 56%',
                         'location' => 'Lantai 1 • Dekat Pintu Masuk',
-                        'desc' => 'Pusat jajanan burger, ayam krispi, camilan dan es kopi kekinian',
+                        'desc' => 'Menyediakan aneka burger, ayam krispi, camilan ringan, serta berbagai pilihan minuman segar.',
                         'rating' => '4.8',
                         'reviews' => '128 ulasan',
                         'time' => '10-15 mnt',
@@ -272,7 +272,7 @@
                         'image' => 'images/kedaimamici.jpg',
                         'position' => 'center 15%',
                         'location' => 'Lantai 1 • Deretan No. 02',
-                        'desc' => 'Spesialis baso aci, baso urat, mie ayam gurih, dan aneka jajanan lezat',
+                        'desc' => 'Menawarkan berbagai hidangan seperti baso aci, baso urat, mi ayam gurih, dan aneka jajanan lezat.',
                         'rating' => '4.9',
                         'reviews' => '210 ulasan',
                         'time' => '12-18 mnt',
@@ -281,7 +281,7 @@
                         'image' => 'images/kantintehnur.jpg',
                         'position' => 'center 20%',
                         'location' => 'Lantai 1 • Deretan No. 03',
-                        'desc' => 'Menu ayam cabe hijau, ayam bawang putih mantap, aneka gorengan, dan jus segar',
+                        'desc' => 'Menyajikan aneka menu rumahan seperti ayam cabe hijau, ayam bawang putih, aneka gorengan, dan minuman.',
                         'rating' => '4.8',
                         'reviews' => '95 ulasan',
                         'time' => '8-12 mnt',
@@ -290,7 +290,7 @@
                         'image' => 'images/kedaibuyanti.jpg',
                         'position' => 'center 20%',
                         'location' => 'Lantai 1 • Deretan No. 04',
-                        'desc' => 'Aneka nasi goreng, kwetiau, mie goreng & rebus lezat resep khas Bu Yanti',
+                        'desc' => 'Menyediakan beragam hidangan favorit seperti nasi goreng, kwetiau, mi goreng, serta aneka makanan lainnya.',
                         'rating' => '4.9',
                         'reviews' => '174 ulasan',
                         'time' => '10-15 mnt',
@@ -354,8 +354,8 @@
                                     <span>{{ $cfg['location'] }}</span>
                                 </p>
 
-                                <p class="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-                                    {{ $outlet->description ?? $cfg['desc'] }}
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    {{ $cfg['desc'] }}
                                 </p>
                             </div>
 
@@ -727,7 +727,6 @@
                 <a href="#home-section" class="hover:text-slate-800">Home</a>
                 <a href="#kantin-section" class="hover:text-slate-800">Kantin</a>
                 <a href="/order/track" class="hover:text-slate-800">Pelacakan Pesanan</a>
-                <a href="/admin" class="hover:text-slate-800">Panel Admin</a>
             </div>
             <p class="text-slate-400">
                 &copy; {{ date('Y') }} Kantin Kampus Terpadu. All rights reserved.
