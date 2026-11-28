@@ -1599,7 +1599,7 @@
             if (!btn) return;
 
             if (isFriendMenu) {
-                if (textSpan) textSpan.innerText = '✓ Simpan Pesanan & Selesai';
+                if (textSpan) textSpan.innerText = 'Simpan Pesanan & Selesai';
                 btn.onclick = returnToSplitFriendsView;
                 btn.className = 'px-5 sm:px-8 py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 via-[#f15a29] to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-orange-500/25 transition-all flex items-center gap-2 cursor-pointer shrink-0';
             } else {
